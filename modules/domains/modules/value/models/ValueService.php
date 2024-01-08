@@ -217,7 +217,7 @@ class ValueService
                  GROUP BY entityId, entityName, attributeName, unit, sort
                 ) product
             ORDER BY sort
-    
+    git remote add origin https://github.com/cnstciti/mincer.git
 select GROUP_CONCAT(dc.value SEPARATOR ' / ') AS value
                                     from dictionary_content dc
                                     left join value_set vs on vs.dictionaryContentId=dc.id
