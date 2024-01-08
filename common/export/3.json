@@ -1,0 +1,32 @@
+{
+	"catalog": {
+		"catalogId": 5,
+		"catalogName": "Шины для легкового транспорта"
+	},
+	"entity": {
+		"entityId": null,
+		"entityName": "Artmotion BEL-253 175/70R13 82T"
+	},
+	"attributes": [
+				{
+			"attributeId": 11,
+			"attributeName": "Максимальная нагрузка",
+			"unitId": 4,
+			"unitName": "кг",
+			"dictionaryId": 10,
+			"dictionaryName": "Максимальная нагрузка шины",
+			"typeId": 6,
+			"typeName": "set",
+			"values": [
+				{
+					"valueId": null,
+					"value": 475
+				},
+				{
+					"valueId": null,
+					"value": 615
+				}
+			]
+		}
+	]
+}

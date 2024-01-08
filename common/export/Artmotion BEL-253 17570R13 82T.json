@@ -1,0 +1,480 @@
+{
+	"catalog": {
+		"catalogId": 5,
+		"catalogName": "Шины для легкового транспорта"
+	},
+	"entity": {
+		"entityId": null,
+		"entityName": "Artmotion BEL-253 175/70R13 82T"
+	},
+	"attributes": [
+		{
+			"attributeId": 3,
+			"attributeName": "Страна производства",
+			"unitId": null,
+			"unitName": null,
+			"dictionaryId": 1,
+			"dictionaryName": "Страна производства",
+			"typeId": 5,
+			"typeName": "enum",
+			"values": [
+				{
+					"valueId": null,
+					"value": "Беларусь"
+				}
+			]
+		},
+		{
+			"attributeId": 4,
+			"attributeName": "Бренд",
+			"unitId": null,
+			"unitName": null,
+			"dictionaryId": 2,
+			"dictionaryName": "Бренд шины для легкового транспорта",
+			"typeId": 5,
+			"typeName": "enum",
+			"values": [
+				{
+					"valueId": null,
+					"value": "Belshina"
+				}
+			]
+		},
+		{
+			"attributeId": 7,
+			"attributeName": "Модель",
+			"unitId": null,
+			"unitName": null,
+			"dictionaryId": 3,
+			"dictionaryName": "Модель шины для легкового транспорта",
+			"typeId": 5,
+			"typeName": "enum",
+			"values": [
+				{
+					"valueId": null,
+					"value": "Artmotion"
+				}
+			]
+		},
+		{
+			"attributeId": 8,
+			"attributeName": "Типоразмер",
+			"unitId": null,
+			"unitName": null,
+			"dictionaryId": null,
+			"dictionaryName": null,
+			"typeId": 3,
+			"typeName": "string",
+			"values": [
+				{
+					"valueId": null,
+					"value": "175/70R13"
+				}
+			]
+		},
+		{
+			"attributeId": 9,
+			"attributeName": "Сезон применения",
+			"unitId": null,
+			"unitName": null,
+			"dictionaryId": 13,
+			"dictionaryName": "Сезон применения шин",
+			"typeId": 5,
+			"typeName": "enum",
+			"values": [
+				{
+					"valueId": null,
+					"value": "лето"
+				}
+			]
+		},
+		{
+			"attributeId": 10,
+			"attributeName": "Индекс нагрузки",
+			"unitId": null,
+			"unitName": null,
+			"dictionaryId": 9,
+			"dictionaryName": "Индекс нагрузки шин",
+			"typeId": 6,
+			"typeName": "set",
+			"values": [
+				{
+					"valueId": null,
+					"value": 82
+				}
+			]
+		},
+		{
+			"attributeId": 11,
+			"attributeName": "Максимальная нагрузка",
+			"unitId": 4,
+			"unitName": "кг",
+			"dictionaryId": 10,
+			"dictionaryName": "Максимальная нагрузка шины",
+			"typeId": 6,
+			"typeName": "set",
+			"values": [
+				{
+					"valueId": null,
+					"value": 475
+				},
+				{
+					"valueId": null,
+					"value": 615
+				}
+			]
+		},
+		{
+			"attributeId": 12,
+			"attributeName": "Индекс скорости",
+			"unitId": null,
+			"unitName": null,
+			"dictionaryId": 11,
+			"dictionaryName": "Индекс скорости шин",
+			"typeId": 5,
+			"typeName": "enum",
+			"values": [
+				{
+					"valueId": null,
+					"value": "T"
+				}
+			]
+		},
+		{
+			"attributeId": 13,
+			"attributeName": "Максимальная скорость",
+			"unitId": 8,
+			"unitName": "км/ч",
+			"dictionaryId": 12,
+			"dictionaryName": "Максимальная скорость шины",
+			"typeId": 5,
+			"typeName": "enum",
+			"values": [
+				{
+					"valueId": null,
+					"value": 190
+				}
+			]
+		},
+		{
+			"attributeId": 14,
+			"attributeName": "Ширина профиля",
+			"unitId": 1,
+			"unitName": "мм",
+			"dictionaryId": 4,
+			"dictionaryName": "Ширина профиля шины",
+			"typeId": 5,
+			"typeName": "enum",
+			"values": [
+				{
+					"valueId": null,
+					"value": 175
+				}
+			]
+		},
+		{
+			"attributeId": 15,
+			"attributeName": "Высота профиля",
+			"unitId": 14,
+			"unitName": "%",
+			"dictionaryId": 5,
+			"dictionaryName": "Высота профиля шины",
+			"typeId": 5,
+			"typeName": "enum",
+			"values": [
+				{
+					"valueId": null,
+					"value": 70
+				}
+			]
+		},
+		{
+			"attributeId": 16,
+			"attributeName": "Конструкция",
+			"unitId": null,
+			"unitName": null,
+			"dictionaryId": 6,
+			"dictionaryName": "Конструкция шины",
+			"typeId": 5,
+			"typeName": "enum",
+			"values": [
+				{
+					"valueId": null,
+					"value": "радиальная"
+				}
+			]
+		},
+		{
+			"attributeId": 17,
+			"attributeName": "Посадочный диаметр",
+			"unitId": 2,
+			"unitName": "дюйм",
+			"dictionaryId": 8,
+			"dictionaryName": "Посадочный диаметр шины",
+			"typeId": 5,
+			"typeName": "enum",
+			"values": [
+				{
+					"valueId": null,
+					"value": 13
+				}
+			]
+		},
+		{
+			"attributeId": 18,
+			"attributeName": "Наружный диаметр",
+			"unitId": 1,
+			"unitName": "мм",
+			"dictionaryId": null,
+			"dictionaryName": null,
+			"typeId": 1,
+			"typeName": "int",
+			"values": [
+				{
+					"valueId": null,
+					"value": 580
+				}
+			]
+		},
+		{
+			"attributeId": 19,
+			"attributeName": "Статический радиус",
+			"unitId": 1,
+			"unitName": "мм",
+			"dictionaryId": null,
+			"dictionaryName": null,
+			"typeId": 1,
+			"typeName": "int",
+			"values": [
+				{
+					"valueId": null,
+					"value": 265
+				}
+			]
+		},
+		{
+			"attributeId": 20,
+			"attributeName": "Ширина обода рекомендуемая",
+			"unitId": 2,
+			"unitName": "дюйм",
+			"dictionaryId": 14,
+			"dictionaryName": "Ширина обода диска",
+			"typeId": 5,
+			"typeName": "enum",
+			"values": [
+				{
+					"valueId": null,
+					"value": 5
+				}
+			]
+		},
+		{
+			"attributeId": 21,
+			"attributeName": "Минимальная ширина обода допустимая",
+			"unitId": 2,
+			"unitName": "дюйм",
+			"dictionaryId": 14,
+			"dictionaryName": "Ширина обода диска",
+			"typeId": 5,
+			"typeName": "enum",
+			"values": [
+				{
+					"valueId": null,
+					"value": 4.5
+				}
+			]
+		},
+		{
+			"attributeId": 22,
+			"attributeName": "Максимальная ширина обода допустимая",
+			"unitId": 2,
+			"unitName": "дюйм",
+			"dictionaryId": 14,
+			"dictionaryName": "Ширина обода диска",
+			"typeId": 5,
+			"typeName": "enum",
+			"values": [
+				{
+					"valueId": null,
+					"value": 6
+				}
+			]
+		},
+		{
+			"attributeId": 23,
+			"attributeName": "Давление в шине",
+			"unitId": 6,
+			"unitName": "кПа",
+			"dictionaryId": null,
+			"dictionaryName": null,
+			"typeId": 1,
+			"typeName": "int",
+			"values": [
+				{
+					"valueId": null,
+					"value": 250
+				}
+			]
+		},
+		{
+			"attributeId": 24,
+			"attributeName": "Дизайн протектора",
+			"unitId": null,
+			"unitName": null,
+			"dictionaryId": 15,
+			"dictionaryName": "Дизайн протектора шины",
+			"typeId": 5,
+			"typeName": "enum",
+			"values": [
+				{
+					"valueId": null,
+					"value": "асимметричный ненаправленный"
+				}
+			]
+		},
+		{
+			"attributeId": 25,
+			"attributeName": "Глубина рисунка протектора",
+			"unitId": 1,
+			"unitName": "мм",
+			"dictionaryId": null,
+			"dictionaryName": null,
+			"typeId": 2,
+			"typeName": "float",
+			"values": [
+				{
+					"valueId": null,
+					"value": 7.100
+				}
+			]
+		},
+		{
+			"attributeId": 26,
+			"attributeName": "Способ герметизации",
+			"unitId": null,
+			"unitName": null,
+			"dictionaryId": 16,
+			"dictionaryName": "Способ герметизации шины",
+			"typeId": 5,
+			"typeName": "enum",
+			"values": [
+				{
+					"valueId": null,
+					"value": "бескамерная"
+				}
+			]
+		},
+		{
+			"attributeId": 27,
+			"attributeName": "Назначение",
+			"unitId": null,
+			"unitName": null,
+			"dictionaryId": 17,
+			"dictionaryName": "Назначение транспорта",
+			"typeId": 5,
+			"typeName": "enum",
+			"values": [
+				{
+					"valueId": null,
+					"value": "для легкового транспорта"
+				}
+			]
+		},
+		{
+			"attributeId": 28,
+			"attributeName": "Шипы",
+			"unitId": null,
+			"unitName": null,
+			"dictionaryId": 23,
+			"dictionaryName": "Логическая переменная (bool)",
+			"typeId": 5,
+			"typeName": "enum",
+			"values": [
+				{
+					"valueId": null,
+					"value": null
+				}
+			]
+		},
+		{
+			"attributeId": 29,
+			"attributeName": "Сайт",
+			"unitId": null,
+			"unitName": null,
+			"dictionaryId": 22,
+			"dictionaryName": "Сайт производителя товара",
+			"typeId": 5,
+			"typeName": "enum",
+			"values": [
+				{
+					"valueId": null,
+					"value": "http://www.belshina.by/"
+				}
+			]
+		},
+		{
+			"attributeId": 30,
+			"attributeName": "Повышенная нагрузка",
+			"unitId": null,
+			"unitName": null,
+			"dictionaryId": 23,
+			"dictionaryName": "Логическая переменная (bool)",
+			"typeId": 5,
+			"typeName": "enum",
+			"values": [
+				{
+					"valueId": null,
+					"value": "нет"
+				}
+			]
+		},
+		{
+			"attributeId": 31,
+			"attributeName": "Индикатор износа",
+			"unitId": null,
+			"unitName": null,
+			"dictionaryId": 23,
+			"dictionaryName": "Логическая переменная (bool)",
+			"typeId": 5,
+			"typeName": "enum",
+			"values": [
+				{
+					"valueId": null,
+					"value": "нет"
+				}
+			]
+		},
+		{
+			"attributeId": 32,
+			"attributeName": "Технология RunFlat",
+			"unitId": null,
+			"unitName": null,
+			"dictionaryId": 23,
+			"dictionaryName": "Логическая переменная (bool)",
+			"typeId": 5,
+			"typeName": "enum",
+			"values": [
+				{
+					"valueId": null,
+					"value": "нет"
+				}
+			]
+		},
+		{
+			"attributeId": 33,
+			"attributeName": "Фактическая ширина шины",
+			"unitId": 1,
+			"unitName": "мм",
+			"dictionaryId": null,
+			"dictionaryName": null,
+			"typeId": 1,
+			"typeName": "int",
+			"values": [
+				{
+					"valueId": null,
+					"value": 176
+				}
+			]
+		}
+	]
+}

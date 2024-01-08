@@ -1,0 +1,108 @@
+{
+	"catalog": {
+		"catalogId": 5,
+		"catalogName": "Шины для легкового транспорта"
+	},
+	"entity": {
+		"entityId": null,
+		"entityName": "Artmotion BEL-253 175/70R13 82T"
+	},
+	"attributes": [
+		{
+			"attributeId": 28,
+			"attributeName": "Шипы",
+			"unitId": null,
+			"unitName": null,
+			"dictionaryId": 23,
+			"dictionaryName": "Логическая переменная (bool)",
+			"typeId": 5,
+			"typeName": "enum",
+			"values": [
+				{
+					"valueId": null,
+					"value": null
+				}
+			]
+		},
+		{
+			"attributeId": 29,
+			"attributeName": "Сайт",
+			"unitId": null,
+			"unitName": null,
+			"dictionaryId": 22,
+			"dictionaryName": "Сайт производителя товара",
+			"typeId": 5,
+			"typeName": "enum",
+			"values": [
+				{
+					"valueId": null,
+					"value": "http://www.belshina.by/"
+				}
+			]
+		},
+		{
+			"attributeId": 30,
+			"attributeName": "Повышенная нагрузка",
+			"unitId": null,
+			"unitName": null,
+			"dictionaryId": 23,
+			"dictionaryName": "Логическая переменная (bool)",
+			"typeId": 5,
+			"typeName": "enum",
+			"values": [
+				{
+					"valueId": null,
+					"value": "нет"
+				}
+			]
+		},
+		{
+			"attributeId": 31,
+			"attributeName": "Индикатор износа",
+			"unitId": null,
+			"unitName": null,
+			"dictionaryId": 23,
+			"dictionaryName": "Логическая переменная (bool)",
+			"typeId": 5,
+			"typeName": "enum",
+			"values": [
+				{
+					"valueId": null,
+					"value": "нет"
+				}
+			]
+		},
+		{
+			"attributeId": 32,
+			"attributeName": "Технология RunFlat",
+			"unitId": null,
+			"unitName": null,
+			"dictionaryId": 23,
+			"dictionaryName": "Логическая переменная (bool)",
+			"typeId": 5,
+			"typeName": "enum",
+			"values": [
+				{
+					"valueId": null,
+					"value": "нет"
+				}
+			]
+		},
+		{
+			"attributeId": 33,
+			"attributeName": "Фактическая ширина шины",
+			"unitId": 1,
+			"unitName": "мм",
+			"dictionaryId": null,
+			"dictionaryName": null,
+			"typeId": 1,
+			"typeName": "int",
+			"values": [
+				{
+					"valueId": null,
+					"value": 176
+				}
+			]
+		}
+	]
+}

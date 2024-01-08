@@ -1,0 +1,51 @@
+<?php declare(strict_types = 1);
+
+namespace modules\domains\modules\import\models;
+
+use Exception;
+use modules\domains\modules\entity\models\EntityService;
+use modules\domains\modules\value\models\values\ValueFactory;
+
+class ImportSaveData
+{
+    public static $maxValueId = 0;
+    
+    
+    /**
+     * Сохранение продукта. Возвращает ИД сохранененной записи
+     *
+     * @param int $catalogId
+     *
+     * @return int
+     * @throws Exception
+     */
+    public static function saveEntity(int $catalogId): int
+    {
+        EntityService::insert($catalogId, ImportGetData::entityName());
+        
+        return EntityService::lastId();
+    }
+    
+    /**
+     * Вставка значения. Возвращает ИД вставленной записи
+     *
+     * @param array $attribute
+     * @param array $value
+     *
+     * @return int
+     * @throws Exception
+     */
+    public static function saveValue(array $attribute, array $value): int
+    {
+        $valueObject = ValueFactory::getValueObject(ImportGetData::typeName($attribute));
+        
+        return $valueObject->insert(
+            $value,
+            ImportGetData::typeId($attribute),
+            self::$maxValueId,
+            ImportGetData::dictionaryId($attribute),
+            ImportGetData::dictionaryName($attribute)
+        );
+    }
+    
+}
