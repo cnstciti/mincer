@@ -102,7 +102,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @param array  $queryParamsd
+     * @param array  $queryParamsdw
      * @param string $title
      *
      * @return mixed
