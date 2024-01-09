@@ -11,17 +11,19 @@ class EavService
     /**
      * сохранение
      *
-     * @param int $typeValueId
-     * @param int $isDelete
+     * @param int $catalogEntityId
+     * @param int $catalogAttributeId
+     * @param int $valueId
+     * @return void
      */
     public static function insert(
-        int $entityId,
+        int $catalogEntityId,
         int $catalogAttributeId,
         int $valueId
     ): void {
         // TODO переделать через DI
         $t                     = new EavTable();
-        $t->entityId           = $entityId;
+        $t->catalogEntityId    = $catalogEntityId;
         $t->catalogAttributeId = $catalogAttributeId;
         $t->valueId            = $valueId;
         $t->save();
@@ -45,7 +47,7 @@ class EavService
     /**
      * Обновление значения valueId записи в EAV-таблице
      *
-     * @param int $entityId
+     * @param int $catalogEntityId
      * @param int $catalogAttributeId
      * @param int $valueId
      * @param int $newValueId
@@ -53,13 +55,13 @@ class EavService
      * @throws Exception
      */
     public static function updateValueId(
-        int $entityId,
+        int $catalogEntityId,
         int $catalogAttributeId,
         int $valueId,
         int $newValueId
     ): void {
-        $t          = EavTable::findOne([
-            'entityId'           => $entityId,
+        $t = EavTable::findOne([
+            'catalogEntityId'    => $catalogEntityId,
             'catalogAttributeId' => $catalogAttributeId,
             'valueId'            => $valueId,
         ]);
@@ -69,8 +71,8 @@ class EavService
             $t->save();
         } else {
             throw new Exception(sprintf(
-                'Не найдена запись в EAV-таблице. entityId: %d, catalogAttributeId: %d, valueId: %d',
-                $entityId,
+                'Не найдена запись в EAV-таблице. catalogEntityId: %d, catalogAttributeId: %d, valueId: %d',
+                $catalogEntityId,
                 $catalogAttributeId,
                 $valueId
             ));

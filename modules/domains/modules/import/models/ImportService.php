@@ -5,6 +5,7 @@ namespace modules\domains\modules\import\models;
 use Exception;
 use modules\domains\Module as DomainsModule;
 use modules\domains\modules\attribute\models\CatalogAttributeService;
+use modules\domains\modules\entity\models\CatalogEntityService;
 use modules\domains\modules\value\models\EavService;
 use Throwable;
 
@@ -52,15 +53,16 @@ class ImportService
         //try {
         //    $transaction = DomainsModule::getInstance()->beginTransaction();
 
-            $catalogId = ImportGetData::catalogId();
-            $entityId  = ImportSaveData::saveEntity($catalogId);
-        
+            $catalogId       = ImportGetData::catalogId();
+            $entityId        = ImportSaveData::saveEntity($catalogId);
+            $catalogEntityId = ImportSaveData::saveCatalogEntity($catalogId, $entityId);
+
             foreach (ImportGetData::attributes() as $attribute) {
                 $catalogAttributeId = self::getCatalogAttribute($catalogId, $attribute);
             
                 foreach (ImportGetData::values($attribute) as $value) {
                     if ($valueId = ImportSaveData::saveValue($attribute, $value)) {
-                        EavService::insert($entityId, $catalogAttributeId, $valueId);
+                        EavService::insert($catalogEntityId, $catalogAttributeId, $valueId);
                     }
                 }
             }

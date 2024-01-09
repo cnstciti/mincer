@@ -27,8 +27,9 @@ class EntitySearch extends EntityTable
      */
     public function search(array $params): ActiveDataProvider
     {
-        $query = self::find();
-        
+        $query = self::find()
+            ->leftJoin(['ce' => 'catalog_entity'], 'ce.entityId=entity.id');
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -43,7 +44,7 @@ class EntitySearch extends EntityTable
             ->andFilterWhere([
                 'id'        => $this->id,
                 'isDelete'  => $this->isDelete,
-                'catalogId' => $params['catalogId'],
+                'ce.catalogId' => $params['catalogId'],
             ])
             ->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'fullName', $this->fullName]);

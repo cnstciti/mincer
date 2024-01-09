@@ -148,6 +148,15 @@ class ValueService
             TypeValue::SET
         );
     /*
+ SELECT vi.*
+   FROM value_int vi
+	   left JOIN value v ON v.id=vi.id
+	   left join eav on eav.valueId=v.id
+	   left join catalog_attribute ca on ca.id=eav.catalogAttributeId
+	   left join catalog_entity ce on ce.id=eav.catalogEntityId
+	   left join type_value tv on v.typeValueId=tv.id
+  WHERE eav.catalogEntityId = 1;
+
             SELECT * FROM (
                 SELECT e.id AS entityId,
                        e.name AS entityName,

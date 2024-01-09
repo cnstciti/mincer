@@ -3,6 +3,7 @@
 namespace modules\domains\modules\import\models;
 
 use Exception;
+use modules\domains\modules\entity\models\CatalogEntityService;
 use modules\domains\modules\entity\models\EntityService;
 use modules\domains\modules\value\models\values\ValueFactory;
 
@@ -25,7 +26,14 @@ class ImportSaveData
         
         return EntityService::lastId();
     }
-    
+
+    public static function saveCatalogEntity(int $catalogId, int $entityId): int
+    {
+        CatalogEntityService::insert($catalogId, $entityId);
+
+        return CatalogEntityService::lastId();
+    }
+
     /**
      * Вставка значения. Возвращает ИД вставленной записи
      *

@@ -91,7 +91,7 @@ class DefaultController extends Controller
                     $dictionaryName
                 );
                 EavService::updateValueId(
-                    $entityId,
+                    $ent ityId,
                     $catalogAttributeId,
                     $valueId,
                     $newValueId
