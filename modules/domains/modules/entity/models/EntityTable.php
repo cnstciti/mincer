@@ -12,7 +12,6 @@ use yii\db\ActiveQueryInterface;
  * This is the model class for table "entity".
  *
  * @property int    $id                     ИД
- * @property int    $catalogId              ИД каталога
  * @property string $name                   Наименование
  * @property string $fullName               Описание
  * @property int    $isDelete               Признак удаления

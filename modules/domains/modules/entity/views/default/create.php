@@ -8,6 +8,7 @@ use yii\web\View;
  * @var View       $this
  * @var EntityForm $model
  * @var string     $title
+ * @var int        $catalogId
  */
 
 $viewName    = 'Создание продукта';
@@ -23,7 +24,7 @@ $this->params['breadcrumbs'][] = [
 ];
 $this->params['breadcrumbs'][] = [
     'label' => $title,
-    'url'   => ['/domains/entity/default/index', 'catalogId' => $model->catalogId],
+    'url'   => ['/domains/entity/default/index', 'catalogId' => $catalogId],
 ];
 $this->params['breadcrumbs'][] = $viewName;
 

@@ -6,6 +6,7 @@ use kartik\bs5dropdown\ButtonDropdown;
 use modules\domains\BaseGrid;
 use Throwable;
 use yii\data\ActiveDataProvider;
+use yii\data\SqlDataProvider;
 use yii\helpers\Url;
 
 class ValueGrid extends BaseGrid
@@ -24,7 +25,7 @@ class ValueGrid extends BaseGrid
      * @throws Throwable
      */
     public static function get(
-        ActiveDataProvider $dataProvider,
+        SqlDataProvider $dataProvider,
         string $title,
         int $catalogId,
         int $entityId,
@@ -48,74 +49,52 @@ class ValueGrid extends BaseGrid
     {
         return [
             [
-                'label'  => 'ИД',
-                'format' => 'raw',
-                'value'  => function ($row) use ($valueAttributes) {
-                    $column = array_column($valueAttributes, 'attributeId');
-                    $key    = array_search($row->id, $column);
-                    
-                    if ($key === false) {
-                        return '';
-                    }
-                    
-                    return $valueAttributes[$key]['id'];
-                },
+                'label'  => 'ИД<br>атрибута',
+                'encodeLabel' => false,
+                'attribute'   => 'attributeId',
+                'vAlign' => 'middle',
+            ],
+            [
+                'label'  => 'ИД<br>значения',
+                'encodeLabel' => false,
+                'attribute'   => 'valueId',
                 'vAlign' => 'middle',
             ],
             [
                 'label'  => "Значение",
-                'format' => 'raw',
-                'value'  => function ($row) use ($valueAttributes) {
-                    $column = array_column($valueAttributes, 'attributeId');
-                    $key    = array_search($row->id, $column);
-                    
-                    if ($key === false) {
-                        return '';
-                    }
-                    
-                    return $valueAttributes[$key]['value'];
-                },
+                'attribute'   => 'value',
                 'vAlign' => 'middle',
             ],
             [
                 'label'       => "Наименование<br>атрибута",
                 'encodeLabel' => false,
-                'attribute'   => 'name',
+                'attribute'   => 'attributeName',
                 'vAlign'      => 'middle',
             ],
             [
                 'label'       => "Тип<br>атрибута",
                 'encodeLabel' => false,
-                'attribute'   => 'type.name',
+                'attribute'   => 'typeName',
                 'vAlign'      => 'middle',
             ],
             [
                 'label'       => "Единица<br>измерения",
                 'encodeLabel' => false,
-                'attribute'   => 'unit.name',
+                'attribute'   => 'unitName',
                 'vAlign'      => 'middle',
             ],
             [
                 'label'     => 'Словарь',
-                'attribute' => 'dictionary.name',
+                'attribute' => 'dictionaryName',
                 'vAlign'    => 'middle',
             ],
             [
                 'label'       => "Признак<br>удаления",
                 'encodeLabel' => false,
-                'value'       => function ($row) use ($valueAttributes) {
-                    $column = array_column($valueAttributes, 'attributeId');
-                    $key    = array_search($row->id, $column);
-                    
-                    if ($key === false) {
-                        return '';
-                    }
-                    
-                    return $valueAttributes[$key]['isDelete'];
-                },
-                'vAlign'      => 'middle',
+                'attribute' => 'isDelete',
+                'vAlign'    => 'middle',
             ],
-            [
+           /*[
                 'label'  => '',
                 'format' => 'raw',
                 'value'  => function ($row) use ($catalogId, $entityId, $valueAttributes) {
@@ -151,7 +130,7 @@ class ValueGrid extends BaseGrid
                 },
                 'width'  => '80px',
                 'vAlign' => 'middle',
-            ],
+            ],*/
         ];
     }
     

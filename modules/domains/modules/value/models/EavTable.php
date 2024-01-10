@@ -11,12 +11,12 @@ use yii\db\ActiveQueryInterface;
 /**
  * This is the model class for table "eav".
  *
- * @property int    $id                           ИД
- * @property int    entityId                      ИД продукта
- * @property int    catalogAttributeId            ИД связи каталог-атрибут
- * @property int    valueId                       Ид значения
- * @property string $createdAt                    Дата создания
- * @property string $updatedAt                    Дата обновления
+ * @property int    $id                     ИД
+ * @property int    $catalogEntityId        ИД продукта
+ * @property int    $catalogAttributeId     ИД связи каталог-атрибут
+ * @property int    $valueId                Ид значения
+ * @property string $createdAt              Дата создания
+ * @property string $updatedAt              Дата обновления
  */
 class EavTable extends BaseTable
 {
