@@ -8,6 +8,7 @@ use modules\domains\modules\attribute\models\AttributeTable;
 use modules\domains\modules\value\models\values\TypeValue;
 use Throwable;
 use yii\data\ActiveDataProvider;
+use yii\data\SqlDataProvider;
 
 class ValueService
 {
@@ -38,11 +39,11 @@ class ValueService
         string $title
     ): string {
         return ValueGrid::get(
-            $this->getDataProvider((int)$queryParams['catalogId']),
+            $this->getDataProvider((int)$queryParams['catalogId'], (int)$queryParams['entityId']),
             $title,
             (int)$queryParams['catalogId'],
             (int)$queryParams['entityId'],
-            $this->getValueAttributes((int)$queryParams['entityId'])
+            $this->getValueAttributes((int)$queryParams['catalogId'], (int)$queryParams['entityId'])
         );
     }
     
@@ -88,151 +89,241 @@ class ValueService
     }
     
     /**
-     * возвращает провайдер атрибутов каталога
+     * Возвращает провайдер атрибутов каталога
      *
      * @param int $catalogId
      *
-     * @return ActiveDataProvider
+     * @return SqlDataProvider
      */
-    public function getDataProvider(int $catalogId): ActiveDataProvider
+    public function getDataProvider(int $catalogId, int $entityId): SqlDataProvider
     {
-        $query = AttributeTable::find()
+        /*$query = AttributeTable::find()
                                ->from('attribute a')
                                ->leftJoin('catalog_attribute ca', 'ca.attributeId=a.id')
-                               ->where(['ca.catalogId' => $catalogId]);
-        
-        return new ActiveDataProvider([
-            'query'      => $query,
+                               ->where(['ca.catalogId' => $catalogId]);*/
+        $query = "
+            SELECT  a.id as attributeId,
+                    vi.id as valueId,
+                    vi.value AS value,
+                    a.name as attributeName,
+                    tv.name as typeName,
+                    u.shortName as unitName,
+                    d.name as dictionaryName,
+                    v.isDelete AS isDelete
+            FROM value_int vi
+                    LEFT JOIN value v ON v.id=vi.id
+                    LEFT JOIN eav on eav.valueId=v.id
+                    LEFT JOIN catalog_attribute ca on ca.id=eav.catalogAttributeId
+                    LEFT JOIN catalog_entity ce on ce.id=eav.catalogEntityId
+                    LEFT JOIN type_value tv on v.typeValueId=tv.id
+                    LEFT JOIN attribute a ON ca.attributeId=a.id
+                    LEFT JOIN unit u ON a.unitId=u.id
+                    LEFT JOIN dictionary d ON a.dictionaryId=d.id
+            WHERE ce.catalogId=:catalogId and ce.entityId=:entityId
+            UNION ALL
+            SELECT  a.id as attributeId,
+                    vf.id as valueId,
+                    vf.value AS value,
+                    a.name as attributeName,
+                    tv.name as typeName,
+                    u.shortName as unitName,
+                    d.name as dictionaryName,
+                    v.isDelete AS isDelete
+            FROM value_float vf
+                     LEFT JOIN value v ON v.id=vf.id
+                     LEFT JOIN eav on eav.valueId=v.id
+                     LEFT JOIN catalog_attribute ca on ca.id=eav.catalogAttributeId
+                     LEFT JOIN catalog_entity ce on ce.id=eav.catalogEntityId
+                     LEFT JOIN type_value tv on v.typeValueId=tv.id
+                     LEFT JOIN attribute a ON ca.attributeId=a.id
+                     LEFT JOIN unit u ON a.unitId=u.id
+                     LEFT JOIN dictionary d ON a.dictionaryId=d.id
+            WHERE ce.catalogId=:catalogId and ce.entityId=:entityId
+            UNION ALL
+            SELECT  a.id as attributeId,
+                    vs.id as valueId,
+                    vs.value AS value,
+                    a.name as attributeName,
+                    tv.name as typeName,
+                    u.shortName as unitName,
+                    d.name as dictionaryName,
+                    v.isDelete AS isDelete
+            FROM value_string vs
+                     LEFT JOIN value v ON v.id=vs.id
+                     LEFT JOIN eav on eav.valueId=v.id
+                     LEFT JOIN catalog_attribute ca on ca.id=eav.catalogAttributeId
+                     LEFT JOIN catalog_entity ce on ce.id=eav.catalogEntityId
+                     LEFT JOIN type_value tv on v.typeValueId=tv.id
+                     LEFT JOIN attribute a ON ca.attributeId=a.id
+                     LEFT JOIN unit u ON a.unitId=u.id
+                     LEFT JOIN dictionary d ON a.dictionaryId=d.id
+            WHERE ce.catalogId=:catalogId and ce.entityId=:entityId
+            UNION ALL
+            SELECT  a.id as attributeId,
+                    vt.id as valueId,
+                    vt.value AS value,
+                    a.name as attributeName,
+                    tv.name as typeName,
+                    u.shortName as unitName,
+                    d.name as dictionaryName,
+                    v.isDelete AS isDelete
+            FROM value_text vt
+                     LEFT JOIN value v ON v.id=vt.id
+                     LEFT JOIN eav on eav.valueId=v.id
+                     LEFT JOIN catalog_attribute ca on ca.id=eav.catalogAttributeId
+                     LEFT JOIN catalog_entity ce on ce.id=eav.catalogEntityId
+                     LEFT JOIN type_value tv on v.typeValueId=tv.id
+                     LEFT JOIN attribute a ON ca.attributeId=a.id
+                     LEFT JOIN unit u ON a.unitId=u.id
+                     LEFT JOIN dictionary d ON a.dictionaryId=d.id
+            WHERE ce.catalogId=:catalogId and ce.entityId=:entityId
+            UNION ALL
+            SELECT  a.id as attributeId,
+                    GROUP_CONCAT(vs.id SEPARATOR ' / ') AS valueId,
+                    GROUP_CONCAT(dc.value SEPARATOR ' / ') AS value,
+                    a.name as attributeName,
+                    tv.name as typeName,
+                    u.shortName as unitName,
+                    d.name as dictionaryName,
+                    GROUP_CONCAT(v.isDelete SEPARATOR ' / ') AS isDelete
+            FROM value_set vs
+                    LEFT JOIN value v ON v.id=vs.id
+                    LEFT JOIN eav on eav.valueId=v.id
+                    LEFT JOIN catalog_attribute ca on ca.id=eav.catalogAttributeId
+                    LEFT JOIN catalog_entity ce on ce.id=eav.catalogEntityId
+                    LEFT JOIN type_value tv on v.typeValueId=tv.id
+                    LEFT JOIN dictionary_content dc ON vs.dictionaryContentId=dc.id
+                    LEFT JOIN attribute a ON ca.attributeId=a.id
+                    LEFT JOIN unit u ON a.unitId=u.id
+                    LEFT JOIN dictionary d ON a.dictionaryId=d.id
+            WHERE ce.catalogId=:catalogId and ce.entityId=:entityId
+            GROUP BY ca.attributeId
+        ";
+
+        $count = BaseModule::getInstance()
+            ->getDb()
+            ->createCommand('SELECT COUNT(*) FROM (' . $query . ') d', [
+                ':catalogId' => $catalogId,
+                ':entityId' => $entityId,
+            ])
+            ->queryScalar();
+
+        return new SqlDataProvider([
+            'sql' => $query,
+            'params' => [
+                ':catalogId' => $catalogId,
+                ':entityId' => $entityId,
+            ],
+            'totalCount' => $count,
             'pagination' => [
                 'pageSize' => 50,
             ],
         ]);
     }
     
-    public static function getValueAttributes(int $entityId): array
+    public static function getValueAttributes(int $catalogId, int $entityId): array
     {
-        $query = sprintf("
-                select
-                    v.*, ca.attributeId, ca.id as ca_id,
-                    CASE
-                        WHEN tv.name='%s'
-                            THEN (select vi.value from value_int vi where vi.id=v.id)
-                        WHEN tv.name='%s'
-                            THEN (select vf.value from value_float vf where vf.id=v.id)
-                        WHEN tv.name='%s'
-                            THEN (select vs.value from value_string vs where vs.id=v.id)
-                        WHEN tv.name='%s'
-                            THEN (select vt.value from value_text vt where vt.id=v.id)
-                        WHEN tv.name='%s'
-                            THEN (select dc.value
-                                    from dictionary_content dc
-                                    left join value_set vs on vs.dictionaryContentId=dc.id
-                                          where vs.id=v.id)
-                        WHEN tv.name='%s'
-                            THEN (select dc.value
-                                    from dictionary_content dc
-                                    left join value_set vs on vs.dictionaryContentId=dc.id
-                                          where vs.id=v.id)
-                    END as value
-                from value v
-                left join eav on eav.valueId=v.id
-                left join catalog_attribute ca on eav.catalogAttributeId=ca.id
-                left join type_value tv on v.typeValueId=tv.id
-                where eav.entityId=:entityId
-            ",
-            TypeValue::INT,
-            TypeValue::FLOAT,
-            TypeValue::STRING,
-            TypeValue::TEXT,
-            TypeValue::ENUM,
-            TypeValue::SET
-        );
-    /*
- SELECT vi.*
-   FROM value_int vi
-	   left JOIN value v ON v.id=vi.id
-	   left join eav on eav.valueId=v.id
-	   left join catalog_attribute ca on ca.id=eav.catalogAttributeId
-	   left join catalog_entity ce on ce.id=eav.catalogEntityId
-	   left join type_value tv on v.typeValueId=tv.id
-  WHERE eav.catalogEntityId = 1;
+        $query = "
+            SELECT  a.id as attributeId,
+                    vi.id as valueId,
+                    vi.value AS value,
+                    a.name as attributeName,
+                    tv.name as typeName,
+                    u.shortName as unitName,
+                    d.name as dictionaryName,
+                    v.isDelete AS isDelete
+            FROM value_int vi
+                    LEFT JOIN value v ON v.id=vi.id
+                    LEFT JOIN eav on eav.valueId=v.id
+                    LEFT JOIN catalog_attribute ca on ca.id=eav.catalogAttributeId
+                    LEFT JOIN catalog_entity ce on ce.id=eav.catalogEntityId
+                    LEFT JOIN type_value tv on v.typeValueId=tv.id
+                    LEFT JOIN attribute a ON ca.attributeId=a.id
+                    LEFT JOIN unit u ON a.unitId=u.id
+                    LEFT JOIN dictionary d ON a.dictionaryId=d.id
+            WHERE ce.catalogId=:catalogId and ce.entityId=:entityId
+            UNION ALL
+            SELECT  a.id as attributeId,
+                    vf.id as valueId,
+                    vf.value AS value,
+                    a.name as attributeName,
+                    tv.name as typeName,
+                    u.shortName as unitName,
+                    d.name as dictionaryName,
+                    v.isDelete AS isDelete
+            FROM value_float vf
+                     LEFT JOIN value v ON v.id=vf.id
+                     LEFT JOIN eav on eav.valueId=v.id
+                     LEFT JOIN catalog_attribute ca on ca.id=eav.catalogAttributeId
+                     LEFT JOIN catalog_entity ce on ce.id=eav.catalogEntityId
+                     LEFT JOIN type_value tv on v.typeValueId=tv.id
+                     LEFT JOIN attribute a ON ca.attributeId=a.id
+                     LEFT JOIN unit u ON a.unitId=u.id
+                     LEFT JOIN dictionary d ON a.dictionaryId=d.id
+            WHERE ce.catalogId=:catalogId and ce.entityId=:entityId
+            UNION ALL
+            SELECT  a.id as attributeId,
+                    vs.id as valueId,
+                    vs.value AS value,
+                    a.name as attributeName,
+                    tv.name as typeName,
+                    u.shortName as unitName,
+                    d.name as dictionaryName,
+                    v.isDelete AS isDelete
+            FROM value_string vs
+                     LEFT JOIN value v ON v.id=vs.id
+                     LEFT JOIN eav on eav.valueId=v.id
+                     LEFT JOIN catalog_attribute ca on ca.id=eav.catalogAttributeId
+                     LEFT JOIN catalog_entity ce on ce.id=eav.catalogEntityId
+                     LEFT JOIN type_value tv on v.typeValueId=tv.id
+                     LEFT JOIN attribute a ON ca.attributeId=a.id
+                     LEFT JOIN unit u ON a.unitId=u.id
+                     LEFT JOIN dictionary d ON a.dictionaryId=d.id
+            WHERE ce.catalogId=:catalogId and ce.entityId=:entityId
+            UNION ALL
+            SELECT  a.id as attributeId,
+                    vt.id as valueId,
+                    vt.value AS value,
+                    a.name as attributeName,
+                    tv.name as typeName,
+                    u.shortName as unitName,
+                    d.name as dictionaryName,
+                    v.isDelete AS isDelete
+            FROM value_text vt
+                     LEFT JOIN value v ON v.id=vt.id
+                     LEFT JOIN eav on eav.valueId=v.id
+                     LEFT JOIN catalog_attribute ca on ca.id=eav.catalogAttributeId
+                     LEFT JOIN catalog_entity ce on ce.id=eav.catalogEntityId
+                     LEFT JOIN type_value tv on v.typeValueId=tv.id
+                     LEFT JOIN attribute a ON ca.attributeId=a.id
+                     LEFT JOIN unit u ON a.unitId=u.id
+                     LEFT JOIN dictionary d ON a.dictionaryId=d.id
+            WHERE ce.catalogId=:catalogId and ce.entityId=:entityId
+            UNION ALL
+            SELECT  a.id as attributeId,
+                    GROUP_CONCAT(vs.id SEPARATOR ' / ') AS valueId,
+                    GROUP_CONCAT(dc.value SEPARATOR ' / ') AS value,
+                    a.name as attributeName,
+                    tv.name as typeName,
+                    u.shortName as unitName,
+                    d.name as dictionaryName,
+                    GROUP_CONCAT(v.isDelete SEPARATOR ' / ') AS isDelete
+            FROM value_set vs
+                    LEFT JOIN value v ON v.id=vs.id
+                    LEFT JOIN eav on eav.valueId=v.id
+                    LEFT JOIN catalog_attribute ca on ca.id=eav.catalogAttributeId
+                    LEFT JOIN catalog_entity ce on ce.id=eav.catalogEntityId
+                    LEFT JOIN type_value tv on v.typeValueId=tv.id
+                    LEFT JOIN dictionary_content dc ON vs.dictionaryContentId=dc.id
+                    LEFT JOIN attribute a ON ca.attributeId=a.id
+                    LEFT JOIN unit u ON a.unitId=u.id
+                    LEFT JOIN dictionary d ON a.dictionaryId=d.id
+            WHERE ce.catalogId=:catalogId and ce.entityId=:entityId
+            GROUP BY ca.attributeId
+        ";
 
-            SELECT * FROM (
-                SELECT e.id AS entityId,
-                       e.name AS entityName,
-                       a.name AS attributeName,
-                       f.value AS attributeValue,
-                       u.nameRuShort AS unit,
-                       ca.numSort AS sort
-                  FROM value_float f
-                  JOIN entity e ON f.idEntity=e.id
-                  JOIN attribute a ON f.idAttribute=a.id
-                  LEFT JOIN unit u ON a.idUnit=u.id
-                  JOIN category_attribute ca ON ca.idAttribute=a.id
-                 WHERE e.id = :idEntity and ca.idCategory=e.idCategory
-            UNION ALL
-                SELECT e.id AS entityId,
-                       e.name AS entityName,
-                       a.name AS attributeName,
-                       i.value AS attributeValue,
-                       u.rusName1 AS unit,
-                       ca.numSort AS sort
-                  FROM value_int i
-                  JOIN entity e ON i.idEntity=e.id
-                  JOIN attribute a ON i.idAttribute=a.id
-                  LEFT JOIN unit u ON a.idUnit=u.id
-                  JOIN category_attribute ca ON ca.idAttribute=a.id
-                 WHERE e.id = :idEntity and ca.idCategory=e.idCategory
-            UNION ALL
-                SELECT e.id AS entityId,
-                       e.name AS entityName,
-                       a.name AS attributeName,
-                       t.value AS attributeValue,
-                       u.rusName1 AS unit,
-                       ca.numSort AS sort
-                  FROM value_text t
-                  JOIN entity e ON t.idEntity=e.id
-                  JOIN attribute a ON t.idAttribute=a.id
-                  LEFT JOIN unit u ON a.idUnit=u.id
-                  JOIN category_attribute ca ON ca.idAttribute=a.id
-                 WHERE e.id = :idEntity and ca.idCategory=e.idCategory
-            UNION ALL
-                SELECT e.id AS entityId,
-                       e.name AS entityName,
-                       a.name AS attributeName,
-                       s.value AS attributeValue,
-                       u.rusName1 AS unit,
-                       ca.numSort AS sort
-                  FROM value_string s
-                  JOIN entity e ON s.idEntity=e.id
-                  JOIN attribute a ON s.idAttribute=a.id
-                  LEFT JOIN unit u ON a.idUnit=u.id
-                  JOIN category_attribute ca ON ca.idAttribute=a.id
-                 WHERE e.id = :idEntity and ca.idCategory=e.idCategory
-            UNION ALL
-                SELECT e.id AS entityId,
-                       e.name AS entityName,
-                       a.name AS attributeName,
-                       GROUP_CONCAT(ov.value SEPARATOR ' / ') AS attributeValue,
-                       u.rusName1 AS unit,
-                       ca.numSort AS sort
-                  FROM value_set s
-                  JOIN entity e ON s.idEntity=e.id
-                  JOIN attribute a ON s.idAttribute=a.id
-                  JOIN option_value ov ON s.idOptionValue=ov.id
-                  LEFT JOIN unit u ON a.idUnit=u.id
-                  JOIN category_attribute ca ON ca.idAttribute=a.id
-                 WHERE e.id = :idEntity and ca.idCategory=e.idCategory
-                 GROUP BY entityId, entityName, attributeName, unit, sort
-                ) product
-            ORDER BY sort
-    git remote add origin https://github.com/cnstciti/mincer.git
-select GROUP_CONCAT(dc.value SEPARATOR ' / ') AS value
-                                    from dictionary_content dc
-                                    left join value_set vs on vs.dictionaryContentId=dc.id
-                                          where vs.id=v.id
-     */
         $vars = [
+            ':catalogId' => $catalogId,
             ':entityId' => $entityId,
         ];
         

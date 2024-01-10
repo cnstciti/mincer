@@ -172,10 +172,10 @@ class DefaultController extends Controller
     /**
      * @param string $title
      *
-     * @return mixed
+     * @return string
      * @throws Exception
      */
-    private function getGrid(string $title): mixed
+    private function getGrid(string $title): string
     {
         try {
             return Yii::$container->invoke(

@@ -105,13 +105,13 @@ class DefaultController extends Controller
      * @param array  $queryParams
      * @param string $title
      *
-     * @return mixed
+     * @return string
      * @throws Exception
      */
     private function getGrid(
         array $queryParams,
         string $title
-    ): mixed {
+    ): string {
         try {
             return Yii::$container->invoke(
                 [

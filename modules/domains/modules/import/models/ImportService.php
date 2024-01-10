@@ -46,7 +46,7 @@ class ImportService
     {
         $data = ImportReadData::openFile($file);
     
-        ImportCleanupData::truncate();
+        //ImportCleanupData::truncate();
     
         ImportGetData::$data = $data;
     
@@ -54,7 +54,7 @@ class ImportService
         //    $transaction = DomainsModule::getInstance()->beginTransaction();
 
             $catalogId       = ImportGetData::catalogId();
-            $entityId        = ImportSaveData::saveEntity($catalogId);
+            $entityId        = ImportSaveData::saveEntity();
             $catalogEntityId = ImportSaveData::saveCatalogEntity($catalogId, $entityId);
 
             foreach (ImportGetData::attributes() as $attribute) {

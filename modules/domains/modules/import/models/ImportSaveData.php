@@ -20,9 +20,9 @@ class ImportSaveData
      * @return int
      * @throws Exception
      */
-    public static function saveEntity(int $catalogId): int
+    public static function saveEntity(): int
     {
-        EntityService::insert($catalogId, ImportGetData::entityName());
+        EntityService::insert(ImportGetData::entityName());
         
         return EntityService::lastId();
     }
