@@ -41,21 +41,12 @@ class DefaultController extends Controller
     /**
      * Редактирование значения
      *
-     * @param int $typeValueId
-     * @param int $valueId
-     * @param int $entityId
-     * @param int $catalogId
-     * @param int $catalogAttributeId
-     * @param int $dictionaryId
-     *
-     * @return string
-     * @throws Exception
      */
     public function actionUpdate(
+        int $catalogId,
+        int $entityId,
         int $typeValueId,
         int $valueId,
-        int $entityId,
-        int $catalogId,
         int $catalogAttributeId,
         int $dictionaryId
     ) {
@@ -82,7 +73,7 @@ class DefaultController extends Controller
                     : '';
                 
                 // TODO в транзакцию упаковать
-                
+                /*
                 $newValueId = $valueObject->insert(
                     $value,
                     $typeValueId,
@@ -95,9 +86,10 @@ class DefaultController extends Controller
                     $catalogAttributeId,
                     $valueId,
                     $newValueId
-                );
+                );*/
             }
-            
+            //int $catalogEntityId,
+
             $this->redirect(['index', 'entityId' => $entityId, 'catalogId' => $catalogId]);
         }
     /*
@@ -191,7 +183,7 @@ class DefaultController extends Controller
      * @return mixed
      * @throws Exception
      */
-    private function getGrid(string $title): mixed
+    private function getGrid(string $title): string
     {
         try {
             return Yii::$container->invoke(
@@ -225,7 +217,11 @@ class DefaultController extends Controller
             ValueService::getTitle()
         );
     }
-    
+
+    /**
+     * @param int $catalogId
+     * @return string
+     */
     private static function getCatalogEntityTitle(int $catalogId): string
     {
         return sprintf(

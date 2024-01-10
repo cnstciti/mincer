@@ -27,12 +27,9 @@ class AttributeSearch extends AttributeTable
      */
     public function search(array $params): ActiveDataProvider
     {
-        // TODO Посмотреть ->joinWith
         $query = self::find()
-                     //->from(['a' => 'attribute'])
                      ->leftJoin(['ca' => 'catalog_attribute'], 'ca.attributeId=attribute.id');
-        //->leftJoin(['c' => 'catalog'], 'ca.catalogId=c.id');
-        
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -48,7 +45,6 @@ class AttributeSearch extends AttributeTable
                 'id'           => $this->id,
                 'isDelete'     => $this->isDelete,
                 'ca.catalogId' => $params['catalogId'],
-                //'c.id'     => $params['catalogId'],
             ])
             ->andFilterWhere(['like', 'name', $this->name]);
         

@@ -3,7 +3,9 @@
 namespace modules\domains\modules\entity\controllers;
 
 use Exception;
+use modules\domains\Module as DomainsModule;
 use modules\domains\modules\catalog\models\CatalogService;
+use modules\domains\modules\entity\models\CatalogEntityService;
 use modules\domains\modules\entity\models\EntityService;
 use Throwable;
 use Yii;
@@ -44,19 +46,31 @@ class DefaultController extends Controller
      */
     public function actionCreate(int $catalogId)
     {
-        $model            = $this->getForm();
-        $model->catalogId = $catalogId;
+        $model = $this->getForm();
+        //$model->catalogId = $catalogId;
         
         if ($this->request->isPost
             && $model->load($this->request->post())
-            && $model->save()
         ) {
+            $transaction = DomainsModule::getInstance()->beginTransaction();
+            try {
+                $model->save();
+
+                CatalogEntityService::insert($catalogId, EntityService::lastId());
+
+                $transaction->commit();
+            } catch (Throwable $e) {
+                $transaction->rollBack();
+                throw $e;
+            }
+
             return $this->redirectIndex($catalogId);
         }
         
         return $this->render('create', [
-            'model' => $model,
-            'title' => self::getCatalogEntityTitle($catalogId),
+            'model'     => $model,
+            'title'     => self::getCatalogEntityTitle($catalogId),
+            'catalogId' => $catalogId,
         ]);
     }
     
@@ -81,8 +95,9 @@ class DefaultController extends Controller
         }
         
         return $this->render('update', [
-            'model' => $model,
-            'title' => self::getCatalogEntityTitle($catalogId),
+            'model'     => $model,
+            'title'     => self::getCatalogEntityTitle($catalogId),
+            'catalogId' => $catalogId,
         ]);
     }
 
@@ -90,13 +105,13 @@ class DefaultController extends Controller
      * @param array  $queryParams
      * @param string $title
      *
-     * @return mixed
+     * @return string
      * @throws Exception
      */
     private function getGrid(
         array $queryParams,
         string $title
-    ): mixed {
+    ): string {
         try {
             return Yii::$container->invoke(
                 [

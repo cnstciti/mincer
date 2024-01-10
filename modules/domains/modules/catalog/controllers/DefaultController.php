@@ -81,7 +81,7 @@ class DefaultController extends Controller
      * @return mixed
      * @throws Exception
      */
-    private function getCatalogGrid(): mixed
+    private function getCatalogGrid(): string
     {
         try {
             return Yii::$container->invoke(
