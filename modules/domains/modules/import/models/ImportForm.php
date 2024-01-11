@@ -7,12 +7,15 @@ use yii\web\UploadedFile;
 
 class ImportForm extends Model
 {
-    
+
     /**
      * @var UploadedFile file attribute
      */
-    public $file;
-    
+    public UploadedFile $file;
+
+    public int $isTruncate;
+
+
     /**
      * @return array the validation rules.
      */
@@ -20,9 +23,10 @@ class ImportForm extends Model
     {
         return [
             [['file'], 'file', 'skipOnEmpty' => false, 'extensions' => 'json'],
+            [['isTruncate'], 'integer'],
         ];
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -32,5 +36,5 @@ class ImportForm extends Model
             'file' => 'Файл импорта',
         ];
     }
-    
+
 }

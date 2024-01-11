@@ -27,6 +27,7 @@ echo Html::tag('h2', $title);
 $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]);
 
 echo $form->field($model, 'file')->fileInput();
+echo $form->field($model, 'isTruncate')->checkbox();
 
 echo Html::tag('button', 'Загрузить');
 

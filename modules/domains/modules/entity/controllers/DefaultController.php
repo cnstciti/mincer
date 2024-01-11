@@ -47,8 +47,7 @@ class DefaultController extends Controller
     public function actionCreate(int $catalogId)
     {
         $model = $this->getForm();
-        //$model->catalogId = $catalogId;
-        
+
         if ($this->request->isPost
             && $model->load($this->request->post())
         ) {
