@@ -39,17 +39,20 @@ class ImportService
      * Импорт из json-файла
      *
      * @param string $file
-     *
-     * @throws Throwable
+     * @param int $isTruncate
+     * @return void
+     * @throws \yii\db\Exception
      */
-    public static function fromJson(string $file)
+    public static function fromJson(string $file, int $isTruncate): void
     {
         $data = ImportReadData::openFile($file);
-    
-        ImportCleanupData::truncate();
+
+        if ($isTruncate) {
+            ImportCleanupData::truncate();
+        }
     
         ImportGetData::$data = $data;
-    
+    // TODO Расскоментировать, т.к. была отладка
         //try {
         //    $transaction = DomainsModule::getInstance()->beginTransaction();
 
