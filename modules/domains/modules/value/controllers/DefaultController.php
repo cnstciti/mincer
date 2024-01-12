@@ -180,7 +180,7 @@ class DefaultController extends Controller
     /**
      * @param string $title
      *
-     * @return mixed
+     * @return string
      * @throws Exception
      */
     private function getGrid(string $title): string

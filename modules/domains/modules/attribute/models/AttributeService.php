@@ -89,27 +89,31 @@ class AttributeService
      */
     public static function dataForSelect2(): array
     {
-        // TODO Посмотреть ->joinWith
         $rows = AttributeTable::find()
-            ->select('a.id, a.name as a_name, t.name as t_name, d.name as d_name, u.name as u_name')
-            ->from(['a' => 'attribute'])
-            ->leftJoin(['u' => 'unit'], 'a.unitId=u.id')
-            ->leftJoin(['d' => 'dictionary'], 'a.dictionaryId=d.id')
-            ->leftJoin(['t' => 'type_value'], 'a.typeValueId=t.id')
-            ->where(['a.isDelete' => 0])
+            ->select('
+                attribute.id, 
+                attribute.name as a_name, 
+                type_value.name as t_name, 
+                dictionary.name as d_name, 
+                unit.shortName as u_name
+            ')
+            ->joinWith('unit')
+            ->joinWith('dictionary')
+            ->joinWith('type')
+            ->where(['attribute.isDelete' => 0])
             ->asArray()
             ->all();
-        
+
         return ArrayHelper::map(
             $rows,
             'id',
             function ($row) {
-                return sprintf('%s (ид: %d, тип: %s, спр-к: %s, ед/изм: %s)',
+                return sprintf('%s (ид: %d%s%s%s)',
                     $row['a_name'],
                     $row['id'],
-                    $row['t_name'],
-                    $row['d_name'],
-                    $row['u_name'],
+                    $row['t_name'] ? ', тип: ' . $row['t_name'] : '',
+                    $row['d_name'] ? ', спр-к: ' . $row['d_name'] : '',
+                    $row['u_name'] ? ', ед/изм: ' . $row['u_name'] : '',
                 );
             });
     }

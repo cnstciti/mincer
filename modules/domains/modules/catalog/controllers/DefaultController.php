@@ -4,6 +4,7 @@ namespace modules\domains\modules\catalog\controllers;
 
 use Exception;
 use modules\domains\Module as DomainsModule;
+use modules\domains\modules\catalog\models\CatalogForm;
 use modules\domains\modules\catalog\models\CatalogService;
 use Throwable;
 use Yii;
@@ -78,7 +79,7 @@ class DefaultController extends Controller
     }
     
     /**
-     * @return mixed
+     * @return string
      * @throws Exception
      */
     private function getCatalogGrid(): string
@@ -105,10 +106,10 @@ class DefaultController extends Controller
     /**
      * @param int $catalogId
      *
-     * @return mixed
+     * @return CatalogForm
      * @throws Exception
      */
-    private function getCatalogForm(int $catalogId = 0): mixed
+    private function getCatalogForm(int $catalogId = 0): CatalogForm
     {
         try {
             return Yii::$container->invoke(

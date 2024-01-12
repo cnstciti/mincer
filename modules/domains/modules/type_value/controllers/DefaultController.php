@@ -4,6 +4,7 @@ namespace modules\domains\modules\type_value\controllers;
 
 use Exception;
 use modules\domains\Module as DomainsModule;
+use modules\domains\modules\type_value\models\TypeValueForm;
 use modules\domains\modules\type_value\models\TypeValueService;
 use Throwable;
 use Yii;
@@ -76,10 +77,10 @@ class DefaultController extends Controller
     }
     
     /**
-     * @return mixed
+     * @return string
      * @throws Exception
      */
-    private function getTypeValueGrid(): mixed
+    private function getTypeValueGrid(): string
     {
         try {
             return Yii::$container->invoke(
@@ -103,10 +104,10 @@ class DefaultController extends Controller
     /**
      * @param int $typeValueId
      *
-     * @return mixed
+     * @return TypeValueForm
      * @throws Exception
      */
-    private function getTypeValueForm(int $typeValueId = 0): mixed
+    private function getTypeValueForm(int $typeValueId = 0): TypeValueForm
     {
         try {
             return Yii::$container->invoke(

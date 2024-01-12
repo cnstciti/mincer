@@ -79,7 +79,7 @@ AppAsset::register($this);
     </header>
 
     <main role="main" class="flex-shrink-0">
-        <div class="container">
+        <div class="container-fluid">
             <?= Breadcrumbs::widget([
                 'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
             ]) ?>
@@ -89,7 +89,7 @@ AppAsset::register($this);
     </main>
 
     <footer class="footer mt-auto py-3 text-muted">
-        <div class="container">
+        <div class="container-fluid">
             <p class="float-start">&copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?></p>
             <p class="float-end"><?= Yii::powered() ?></p>
         </div>

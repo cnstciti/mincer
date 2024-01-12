@@ -4,8 +4,11 @@ namespace modules\domains\modules\attribute\controllers;
 
 use Exception;
 use modules\domains\Module as DomainsModule;
+use modules\domains\modules\attribute\models\AttributeForm;
+use modules\domains\modules\attribute\models\AttributeSelectForm;
 use modules\domains\modules\attribute\models\AttributeService;
 use modules\domains\modules\attribute\models\CatalogAttributeService;
+use modules\domains\modules\attribute\models\FullNameParamForm;
 use modules\domains\modules\attribute\models\FullNameParamService;
 use modules\domains\modules\catalog\models\CatalogService;
 use modules\domains\modules\dictionary\models\DictionaryService;
@@ -57,11 +60,11 @@ class DefaultController extends Controller
             $transaction = DomainsModule::getInstance()->beginTransaction();
             try {
                 $attributeModel->save();
-                
-                CatalogAttributeService::insert($catalogId, AttributeService::lastId());
-                
+
+                self::insertCatalogAttribute($catalogId, AttributeService::lastId());
+
                 if ($sn = (int)$fullNameParamModel->sequenceNumber) {
-                    FullNameParamService::insert(CatalogAttributeService::lastId(), $sn);
+                    self::insertFullNameParam(CatalogAttributeService::lastId(), $sn);
                 }
                 
                 $transaction->commit();
@@ -112,7 +115,8 @@ class DefaultController extends Controller
                     if ($fullNameParamModel->id) {
                         FullNameParamService::update($fullNameParamModel->id, $sn);
                     } else {
-                        FullNameParamService::insert(
+                        self::insertFullNameParam(
+                        //FullNameParamService::insert(
                             CatalogAttributeService::getId($attributeId, $catalogId),
                             $sn
                         );
@@ -156,8 +160,8 @@ class DefaultController extends Controller
         if ($this->request->isPost
             && $model->load($this->request->post())
         ) {
-            CatalogAttributeService::insert($catalogId, (int)$model->attributeId);
-            
+            self::insertCatalogAttribute($catalogId, (int)$model->attributeId);
+
             return $this->redirectIndex($catalogId);
         }
         
@@ -200,10 +204,10 @@ class DefaultController extends Controller
     /**
      * @param int $attributeId
      *
-     * @return mixed
+     * @return AttributeForm
      * @throws Exception
      */
-    private function getAttributeForm(int $attributeId = 0): mixed
+    private function getAttributeForm(int $attributeId = 0): AttributeForm
     {
         try {
             return Yii::$container->invoke(
@@ -227,10 +231,10 @@ class DefaultController extends Controller
      * @param int $attributeId
      * @param int $catalogId
      *
-     * @return mixed
+     * @return FullNameParamForm
      * @throws Exception
      */
-    private function getFullNameParamForm(int $attributeId = 0, int $catalogId = 0)
+    private function getFullNameParamForm(int $attributeId = 0, int $catalogId = 0): FullNameParamForm
     {
         try {
             $catalogAttributeId = CatalogAttributeService::getId($attributeId, $catalogId);
@@ -253,10 +257,10 @@ class DefaultController extends Controller
     }
     
     /**
-     * @return mixed
+     * @return AttributeSelectForm
      * @throws Exception
      */
-    private function getSelectForm(): mixed
+    private function getSelectForm(): AttributeSelectForm
     {
         try {
             return Yii::$container->invoke(
@@ -296,5 +300,47 @@ class DefaultController extends Controller
     {
         return $this->redirect(['index', 'catalogId' => $catalogId]);
     }
-    
+
+    private function insertCatalogAttribute(int $catalogId, int $attributeId): void
+    {
+        try {
+            Yii::$container->invoke(
+                [
+                    new CatalogAttributeService,
+                    'insert',
+                ],
+                [
+                    'catalogId' => $catalogId,
+                    'attributeId' => $attributeId,
+                ]
+            );
+        } catch (Throwable $e) {
+            throw new Exception(sprintf(
+                'Ошибка вызова CatalogAttributeService->insert: %s',
+                $e->getMessage()
+            ));
+        }
+    }
+
+    private function insertFullNameParam(int $catalogAttributeId, int $sequenceNumber): void
+    {
+        try {
+            Yii::$container->invoke(
+                [
+                    new FullNameParamService,
+                    'insert',
+                ],
+                [
+                    'catalogAttributeId' => $catalogAttributeId,
+                    'sequenceNumber' => $sequenceNumber,
+                ]
+            );
+        } catch (Throwable $e) {
+            throw new Exception(sprintf(
+                'Ошибка вызова FullNameParamService->insert: %s',
+                $e->getMessage()
+            ));
+        }
+    }
+
 }

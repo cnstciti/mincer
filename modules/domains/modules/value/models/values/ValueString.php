@@ -2,8 +2,11 @@
 
 namespace modules\domains\modules\value\models\values;
 
+use Exception;
 use modules\domains\modules\value\models\ValueStringService;
 use modules\domains\modules\value\models\ValueStringTable;
+use Throwable;
+use Yii;
 
 class ValueString extends ValueObject
 {
@@ -32,7 +35,23 @@ class ValueString extends ValueObject
      */
     protected function insertValueObject(array $value): void
     {
-        ValueStringService::insert($value['valueId'], $value['value']);
+        try {
+            Yii::$container->invoke(
+                [
+                    new ValueStringService,
+                    'insert',
+                ],
+                [
+                    'id' => (int)$value['valueId'],
+                    'value' => $value['value'],
+                ]
+            );
+        } catch (Throwable $e) {
+            throw new Exception(sprintf(
+                'Ошибка вызова ValueStringService->insert: %s',
+                $e->getMessage()
+            ));
+        }
     }
     
     /**

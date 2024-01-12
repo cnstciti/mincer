@@ -2,8 +2,11 @@
 
 namespace modules\domains\modules\value\models\values;
 
+use Exception;
 use modules\domains\modules\value\models\ValueFloatService;
 use modules\domains\modules\value\models\ValueFloatTable;
+use Throwable;
+use Yii;
 
 class ValueFloat extends ValueObject
 {
@@ -32,7 +35,23 @@ class ValueFloat extends ValueObject
      */
     protected function insertValueObject(array $value): void
     {
-        ValueFloatService::insert((int)$value['valueId'], (float)$value['value']);
+        try {
+            Yii::$container->invoke(
+                [
+                    new ValueFloatService,
+                    'insert',
+                ],
+                [
+                    'id' => (int)$value['valueId'],
+                    'value' => (float)$value['value'],
+                ]
+            );
+        } catch (Throwable $e) {
+            throw new Exception(sprintf(
+                'Ошибка вызова ValueFloatService->insert: %s',
+                $e->getMessage()
+            ));
+        }
     }
     
     /**

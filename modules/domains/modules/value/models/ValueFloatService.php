@@ -11,13 +11,12 @@ class ValueFloatService
     /**
      * сохранение
      *
+     * @param ValueFloatTable $t
      * @param int $id
      * @param float $value
      */
-    public static function insert(int $id, float $value): void
+    public static function insert(ValueFloatTable $t, int $id, float $value): void
     {
-        // TODO переделать через DI
-        $t        = new ValueFloatTable;
         $t->id    = $id;
         $t->value = $value;
         $t->save();

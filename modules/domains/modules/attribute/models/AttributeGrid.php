@@ -3,7 +3,6 @@
 namespace modules\domains\modules\attribute\models;
 
 use kartik\bs5dropdown\ButtonDropdown;
-use kartik\grid\GridView;
 use modules\domains\BaseGrid;
 use Throwable;
 use yii\data\ActiveDataProvider;

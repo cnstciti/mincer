@@ -81,14 +81,12 @@ class EntityService
     /**
      * сохранение
      *
-     * @param int    $catalogId
+     * @param EntityTable    $t
      * @param string $entityName
      * @param int    $isDelete
      */
-    public static function insert(string $entityName, int $isDelete = 0): void
+    public static function insert(EntityTable $t, string $entityName, int $isDelete = 0): void
     {
-        // TODO переделать через DI
-        $t            = new EntityTable();
         $t->name      = $entityName;
         $t->isDelete  = $isDelete;
         $t->save();

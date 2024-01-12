@@ -11,13 +11,12 @@ class ValueSetService
     /**
      * сохранение
      *
+     * @param ValueSetTable $t
      * @param int $id
      * @param int $dictionaryContentId
      */
-    public static function insert(int $id, int $dictionaryContentId): void
+    public static function insert(ValueSetTable $t, int $id, int $dictionaryContentId): void
     {
-        // TODO переделать через DI
-        $t                      = new ValueSetTable;
         $t->id                  = $id;
         $t->dictionaryContentId = $dictionaryContentId;
         $t->save();

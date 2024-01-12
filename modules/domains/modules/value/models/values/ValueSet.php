@@ -6,6 +6,8 @@ use Exception;
 use modules\domains\modules\dictionary_content\models\DictionaryContentTable;
 use modules\domains\modules\value\models\ValueSetService;
 use modules\domains\modules\value\models\ValueSetTable;
+use Throwable;
+use Yii;
 
 class ValueSet extends ValueObject
 {
@@ -25,7 +27,7 @@ class ValueSet extends ValueObject
             $dictionaryName
         );
         
-        // ищем, существует ли запись с таком значением в БД
+        // ищем, существует ли запись с таким значением в БД
         if ($valueSet = ValueSetTable::findOne([
                 'dictionaryContentId' => $dictionaryContent->id
             ])
@@ -56,7 +58,23 @@ class ValueSet extends ValueObject
      */
     public function insertValueObject(array $value): void
     {
-        ValueSetService::insert($value['valueId'], $value['value']);
+        try {
+            Yii::$container->invoke(
+                [
+                    new ValueSetService,
+                    'insert',
+                ],
+                [
+                    'id' => (int)$value['valueId'],
+                    'dictionaryContentId' => (int)$value['value'],
+                ]
+            );
+        } catch (Throwable $e) {
+            throw new Exception(sprintf(
+                'Ошибка вызова ValueSetService->insert: %s',
+                $e->getMessage()
+            ));
+        }
     }
     
     /**

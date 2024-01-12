@@ -8,20 +8,19 @@ class CatalogAttributeService
     /**
      * сохранение
      *
+     * @param CatalogAttributeTable $t
      * @param int $catalogId
      * @param int $attributeId
      */
-    public static function insert(int $catalogId, int $attributeId): void
+    public static function insert(CatalogAttributeTable $t, int $catalogId, int $attributeId): void
     {
-        // TODO переделать через DI
-        $t              = new CatalogAttributeTable();
         $t->catalogId   = $catalogId;
         $t->attributeId = $attributeId;
         $t->save();
     }
     
     /**
-     * возвращает ИД
+     * Возвращает ИД
      *
      * @param int $attributeId
      * @param int $catalogId

@@ -50,13 +50,19 @@ class ValueService
     /**
      * сохранение
      *
+     * @param ValueTable $t
+     * @param int $valueId
      * @param int $typeValueId
      * @param int $isDelete
+     * @return void
      */
-    public static function insert(int $valueId, int $typeValueId, int $isDelete = 0): void
+    public static function insert(
+        ValueTable $t,
+        int $valueId,
+        int $typeValueId,
+        int $isDelete = 0
+    ): void
     {
-        // TODO переделать через DI
-        $t              = new ValueTable();
         $t->id          = $valueId;
         $t->typeValueId = $typeValueId;
         $t->isDelete    = $isDelete;

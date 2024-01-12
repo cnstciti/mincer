@@ -5,6 +5,7 @@ namespace modules\domains\modules\dictionary_content\controllers;
 use Exception;
 use modules\domains\Module as DomainsModule;
 use modules\domains\modules\dictionary\models\DictionaryService;
+use modules\domains\modules\dictionary_content\models\DictionaryContentForm;
 use modules\domains\modules\dictionary_content\models\DictionaryContentService;
 use RuntimeException;
 use Throwable;
@@ -93,10 +94,10 @@ class DefaultController extends Controller
      * @param string $title
      * @param int    $dictionaryId
      *
-     * @return mixed
+     * @return string
      * @throws Exception
      */
-    private function getDictionaryContentGrid(string $title): mixed
+    private function getDictionaryContentGrid(string $title): string
     {
         try {
             return Yii::$container->invoke(
@@ -121,10 +122,10 @@ class DefaultController extends Controller
     /**
      * @param int $dictionaryContentId
      *
-     * @return mixed
+     * @return DictionaryContentForm
      * @throws Exception
      */
-    private function getDictionaryContentForm(int $dictionaryContentId = 0): mixed
+    private function getDictionaryContentForm(int $dictionaryContentId = 0): DictionaryContentForm
     {
         try {
             return Yii::$container->invoke(

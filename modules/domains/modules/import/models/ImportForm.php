@@ -11,9 +11,9 @@ class ImportForm extends Model
     /**
      * @var UploadedFile file attribute
      */
-    public UploadedFile $file;
+    public $file;
 
-    public int $isTruncate;
+    public $isTruncate;
 
 
     /**
@@ -34,6 +34,7 @@ class ImportForm extends Model
     {
         return [
             'file' => 'Файл импорта',
+            'isTruncate' => 'Очистить данные перед импортом?',
         ];
     }
 

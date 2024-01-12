@@ -33,15 +33,15 @@ class FullNameParamService
     /**
      * сохранение
      *
+     * @param FullNameParamTable $t
      * @param int $catalogAttributeId
      * @param int $sequenceNumber
      */
     public static function insert(
+        FullNameParamTable $t,
         int $catalogAttributeId,
         int $sequenceNumber
     ): void {
-        // TODO переделать через DI
-        $t                 = new FullNameParamTable();
         $t->id             = $catalogAttributeId;
         $t->sequenceNumber = $sequenceNumber;
         $t->save();

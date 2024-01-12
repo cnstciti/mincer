@@ -4,7 +4,10 @@ namespace modules\domains\modules\value\models\values;
 
 use Exception;
 use modules\domains\BaseTable;
+use modules\domains\Module as DomainsModule;
 use modules\domains\modules\value\models\ValueService;
+use Throwable;
+use Yii;
 
 abstract class ValueObject
 {
@@ -12,8 +15,6 @@ abstract class ValueObject
      * Сохранение значения
      *
      * @param array $value
-     *
-     * @return mixed
      */
     abstract protected function insertValueObject(array $value): void;
     
@@ -98,18 +99,45 @@ abstract class ValueObject
             return $findValueId;
         }
 
-// TODO обвернуть в транзакию
-        
-        $valueId = ++$maxValueId;
-        $findValue = $this->computeValue($value, $dictionaryId, $dictionaryName);
-    
-        ValueService::insert($valueId, $typeId);
-        $this->insertValueObject([
-            'valueId' => $valueId,
-            'value'   => $findValue,
-        ]);
-        
+        $transaction = DomainsModule::getInstance()->beginTransaction();
+        try {
+            $valueId = ++$maxValueId;
+            $findValue = $this->computeValue($value, $dictionaryId, $dictionaryName);
+
+            self::insertValue($valueId, $typeId);
+            $this->insertValueObject([
+                'valueId' => $valueId,
+                'value'   => $findValue,
+            ]);
+
+            $transaction->commit();
+        } catch (Throwable $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+
         return $valueId;
     }
-    
+
+    private function insertValue(int $valueId, int $typeValueId): void
+    {
+        try {
+            Yii::$container->invoke(
+                [
+                    new ValueService,
+                    'insert',
+                ],
+                [
+                    'valueId' => $valueId,
+                    'typeValueId' => $typeValueId,
+                ]
+            );
+        } catch (Throwable $e) {
+            throw new Exception(sprintf(
+                'Ошибка вызова ValueService->insert: %s',
+                $e->getMessage()
+            ));
+        }
+    }
+
 }

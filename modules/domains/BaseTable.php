@@ -39,7 +39,7 @@ class BaseTable extends ActiveRecord
      */
     public static function lastId(): int
     {
-        return static::find()->max('id');
+        return (int)static::find()->max('id');
     }
     
 }

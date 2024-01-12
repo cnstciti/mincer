@@ -11,13 +11,12 @@ class ValueTextService
     /**
      * сохранение
      *
+     * @param ValueTextTable $t
      * @param int $id
      * @param string $value
      */
-    public static function insert(int $id, string $value): void
+    public static function insert(ValueTextTable $t, int $id, string $value): void
     {
-        // TODO переделать через DI
-        $t        = new ValueTextTable;
         $t->id    = $id;
         $t->value = $value;
         $t->save();

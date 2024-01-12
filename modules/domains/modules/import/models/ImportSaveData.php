@@ -6,6 +6,8 @@ use Exception;
 use modules\domains\modules\entity\models\CatalogEntityService;
 use modules\domains\modules\entity\models\EntityService;
 use modules\domains\modules\value\models\values\ValueFactory;
+use Throwable;
+use Yii;
 
 class ImportSaveData
 {
@@ -22,14 +24,45 @@ class ImportSaveData
      */
     public static function saveEntity(): int
     {
-        EntityService::insert(ImportGetData::entityName());
-        
+        try {
+            Yii::$container->invoke(
+                [
+                    new EntityService,
+                    'insert',
+                ],
+                [
+                    'entityName' => ImportGetData::entityName(),
+                ]
+            );
+        } catch (Throwable $e) {
+            throw new Exception(sprintf(
+                'Ошибка вызова EntityService->insert: %s',
+                $e->getMessage()
+            ));
+        }
+
         return EntityService::lastId();
     }
 
     public static function saveCatalogEntity(int $catalogId, int $entityId): int
     {
-        CatalogEntityService::insert($catalogId, $entityId);
+        try {
+            Yii::$container->invoke(
+                [
+                    new CatalogEntityService,
+                    'insert',
+                ],
+                [
+                    'catalogId' => $catalogId,
+                    'entityId' => $entityId,
+                ]
+            );
+        } catch (Throwable $e) {
+            throw new Exception(sprintf(
+                'Ошибка вызова CatalogEntityService->insert: %s',
+                $e->getMessage()
+            ));
+        }
 
         return CatalogEntityService::lastId();
     }

@@ -6,6 +6,7 @@ use Exception;
 use modules\domains\Module as DomainsModule;
 use modules\domains\modules\catalog\models\CatalogService;
 use modules\domains\modules\entity\models\CatalogEntityService;
+use modules\domains\modules\entity\models\EntityForm;
 use modules\domains\modules\entity\models\EntityService;
 use Throwable;
 use Yii;
@@ -55,7 +56,7 @@ class DefaultController extends Controller
             try {
                 $model->save();
 
-                CatalogEntityService::insert($catalogId, EntityService::lastId());
+                self::insertCatalogEntity($catalogId, EntityService::lastId());
 
                 $transaction->commit();
             } catch (Throwable $e) {
@@ -133,10 +134,10 @@ class DefaultController extends Controller
     /**
      * @param int $entityId
      *
-     * @return mixed
+     * @return EntityForm
      * @throws Exception
      */
-    private function getForm(int $entityId = 0): mixed
+    private function getForm(int $entityId = 0): EntityForm
     {
         try {
             return Yii::$container->invoke(
@@ -179,5 +180,26 @@ class DefaultController extends Controller
     {
         return $this->redirect(['index', 'catalogId' => $catalogId]);
     }
-    
+
+    private function insertCatalogEntity(int $catalogId, int $entityId): void
+    {
+        try {
+            Yii::$container->invoke(
+                [
+                    new CatalogEntityService,
+                    'insert',
+                ],
+                [
+                    'catalogId' => $catalogId,
+                    'entityId' => $entityId,
+                ]
+            );
+        } catch (Throwable $e) {
+            throw new Exception(sprintf(
+                'Ошибка вызова CatalogEntityService->insert: %s',
+                $e->getMessage()
+            ));
+        }
+    }
+
 }

@@ -25,8 +25,9 @@ class DefaultController extends Controller
             $model->file = UploadedFile::getInstance($model, 'file');
         
             if ($model->file && $model->validate()) {
-                ImportService::fromJson($model->file->tempName, $model->isTruncate);
-            
+                $isTruncate = (int)Yii::$app->request->post("ImportForm")['isTruncate'];
+                ImportService::fromJson($model->file->tempName, $isTruncate);
+
                 return $this->render('finish', [
                     'title' => ImportService::getTitle(),
                 ]);
@@ -40,7 +41,7 @@ class DefaultController extends Controller
     }
     
     /**
-     * @return mixed
+     * @return ImportForm
      * @throws Exception
      */
     private function getImportForm(): ImportForm

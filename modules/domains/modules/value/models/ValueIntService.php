@@ -11,13 +11,12 @@ class ValueIntService
     /**
      * сохранение
      *
+     * @param ValueIntTable $t
      * @param int $id
      * @param int $value
      */
-    public static function insert(int $id, int $value): void
+    public static function insert(ValueIntTable $t, int $id, int $value): void
     {
-        // TODO переделать через DI
-        $t        = new ValueIntTable;
         $t->id    = $id;
         $t->value = $value;
         $t->save();

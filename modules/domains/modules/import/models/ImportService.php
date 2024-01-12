@@ -5,9 +5,9 @@ namespace modules\domains\modules\import\models;
 use Exception;
 use modules\domains\Module as DomainsModule;
 use modules\domains\modules\attribute\models\CatalogAttributeService;
-use modules\domains\modules\entity\models\CatalogEntityService;
 use modules\domains\modules\value\models\EavService;
 use Throwable;
+use Yii;
 
 class ImportService
 {
@@ -52,9 +52,9 @@ class ImportService
         }
     
         ImportGetData::$data = $data;
-    // TODO Расскоментировать, т.к. была отладка
-        //try {
-        //    $transaction = DomainsModule::getInstance()->beginTransaction();
+
+        try {
+            $transaction = DomainsModule::getInstance()->beginTransaction();
 
             $catalogId       = ImportGetData::catalogId();
             $entityId        = ImportSaveData::saveEntity();
@@ -65,16 +65,16 @@ class ImportService
             
                 foreach (ImportGetData::values($attribute) as $value) {
                     if ($valueId = ImportSaveData::saveValue($attribute, $value)) {
-                        EavService::insert($catalogEntityId, $catalogAttributeId, $valueId);
+                        self::insertEav($catalogEntityId, $catalogAttributeId, $valueId);
                     }
                 }
             }
         
-        //    $transaction->commit();
-        //} catch (Throwable $e) {
-        //    $transaction->rollBack();
-        //    throw $e;
-        //}
+            $transaction->commit();
+        } catch (Throwable $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
     }
     
     /**
@@ -99,5 +99,31 @@ class ImportService
         
         return $catalogAttributeId;
     }
-    
+
+    private static function insertEav(
+        int $catalogEntityId,
+        int $catalogAttributeId,
+        int $valueId
+    ): void
+    {
+        try {
+            Yii::$container->invoke(
+                [
+                    new EavService,
+                    'insert',
+                ],
+                [
+                    'catalogEntityId' => $catalogEntityId,
+                    'catalogAttributeId' => $catalogAttributeId,
+                    'valueId' => $valueId,
+                ]
+            );
+        } catch (Throwable $e) {
+            throw new Exception(sprintf(
+                'Ошибка вызова EavService->insert: %s',
+                $e->getMessage()
+            ));
+        }
+    }
+
 }

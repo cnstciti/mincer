@@ -3,6 +3,7 @@
 namespace modules\domains\modules\unit\controllers;
 
 use modules\domains\Module as DomainsModule;
+use modules\domains\modules\unit\models\UnitForm;
 use modules\domains\modules\unit\models\UnitService;
 use Exception;
 use Throwable;
@@ -76,10 +77,10 @@ class DefaultController extends Controller
     }
     
     /**
-     * @return mixed
+     * @return string
      * @throws Exception
      */
-    private function getUnitGrid(): mixed
+    private function getUnitGrid(): string
     {
         try {
             return Yii::$container->invoke(
@@ -103,10 +104,10 @@ class DefaultController extends Controller
     /**
      * @param int $unitId
      *
-     * @return mixed
+     * @return UnitForm
      * @throws Exception
      */
-    private function getUnitForm(int $unitId = 0): mixed
+    private function getUnitForm(int $unitId = 0): UnitForm
     {
         try {
             return Yii::$container->invoke(

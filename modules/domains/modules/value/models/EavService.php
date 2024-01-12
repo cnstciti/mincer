@@ -11,18 +11,18 @@ class EavService
     /**
      * сохранение
      *
+     * @param EavTable $t
      * @param int $catalogEntityId
      * @param int $catalogAttributeId
      * @param int $valueId
      * @return void
      */
     public static function insert(
+        EavTable $t,
         int $catalogEntityId,
         int $catalogAttributeId,
         int $valueId
     ): void {
-        // TODO переделать через DI
-        $t                     = new EavTable();
         $t->catalogEntityId    = $catalogEntityId;
         $t->catalogAttributeId = $catalogAttributeId;
         $t->valueId            = $valueId;
