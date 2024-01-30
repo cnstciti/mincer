@@ -13,10 +13,9 @@ class ValueFloat extends ValueObject
      */
     public function existValue(
         array $value,
-        int $dictionaryId,
-        string $dictionaryName
+        int $dictionaryId
     ): int {
-        // ищем, существует ли запись с таком значением в БД
+        // ищем, существует ли запись с таким значением в БД
         if ($valueFloat = ValueFloatTable::findOne([
             'value' => $value['value']
         ])

@@ -7,7 +7,7 @@ use yii\web\View;
 
 /**
  * @var View   $this
- * //* @var BaseTable $model
+ * @var BaseTable $model
  * @var string $title
  * @var string $indexTitle
  * @var int    $catalogId

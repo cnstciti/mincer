@@ -32,15 +32,14 @@ abstract class ValueObject
      *
      * @param array  $value
      * @param int    $dictionaryId
-     * @param string $dictionaryName
+     //* @param string $dictionaryName
      *
      * @return int
      * @throws Exception
      */
     abstract protected function existValue(
         array $value,
-        int $dictionaryId,
-        string $dictionaryName
+        int $dictionaryId
     ): int;
     
     /**
@@ -48,15 +47,13 @@ abstract class ValueObject
      *
      * @param array  $value
      * @param int    $dictionaryId
-     * @param string $dictionaryName
      *
      * @return int
      * @throws Exception
      */
     protected function computeValue(
         array $value,
-        int $dictionaryId,
-        string $dictionaryName
+        int $dictionaryId
     )
     {
         return $value[$this->getValueName()];
@@ -70,11 +67,10 @@ abstract class ValueObject
     /**
      * Вставки значениЙ
      *
-     * @param array  $value
+     * @param array  $value     // ['valueId' => ?int, 'value' => ?mixed]
      * @param int    $typeId
      * @param int    $maxValueId
      * @param int    $dictionaryId
-     * @param string $dictionaryName
      *
      * @return int
      * @throws Exception
@@ -83,8 +79,7 @@ abstract class ValueObject
         array $value,
         int $typeId,
         int &$maxValueId,
-        int $dictionaryId,
-        string $dictionaryName
+        int $dictionaryId
     ): int {
 
         // нет значения - ничего не сохранием
@@ -94,19 +89,18 @@ abstract class ValueObject
         
         // проверяем, существует ли такое значение в БД
         // если существует, то возвращаем ИД значения из БД
-        if ($findValueId = $this->existValue($value, $dictionaryId, $dictionaryName)) {
+        if ($findValueId = $this->existValue($value, $dictionaryId)) {
             return $findValueId;
         }
 
 // TODO обвернуть в транзакию
         
         $valueId = ++$maxValueId;
-        $findValue = $this->computeValue($value, $dictionaryId, $dictionaryName);
-    
+
         ValueService::insert($valueId, $typeId);
         $this->insertValueObject([
             'valueId' => $valueId,
-            'value'   => $findValue,
+            'value'   => $this->computeValue($value, $dictionaryId),
         ]);
         
         return $valueId;

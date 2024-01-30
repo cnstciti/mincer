@@ -17,9 +17,9 @@ class ValueGrid extends BaseGrid
      *
      * @param ActiveDataProvider $dataProvider
      * @param string             $title
-     * @param int                $catalogId
      * @param int                $entityId
-     * @param array              $valueAttributes
+     * @param int                $catalogId
+     //* @param array              $valueAttributes
      *
      * @return string
      * @throws Throwable
@@ -27,16 +27,16 @@ class ValueGrid extends BaseGrid
     public static function get(
         SqlDataProvider $dataProvider,
         string $title,
-        int $catalogId,
         int $entityId,
-        array $valueAttributes
+        int $catalogId/*,
+        array $valueAttributes*/
     ): string {
         self::$panelHeading = $title;
         
         return self::widget([
             'dataProvider' => $dataProvider,
             'filterModel'  => '',
-            'columns'      => self::columns($entityId, $catalogId, $valueAttributes),
+            'columns'      => self::columns($entityId, $catalogId/*, $valueAttributes*/),
         ]);
     }
     
@@ -45,7 +45,7 @@ class ValueGrid extends BaseGrid
      *
      * @return array
      */
-    private static function columns(int $entityId, int $catalogId, array $valueAttributes): array
+    private static function columns(int $entityId, int $catalogId/*, array $valueAttributes*/): array
     {
         return [
             [
@@ -94,27 +94,31 @@ class ValueGrid extends BaseGrid
                 'attribute' => 'isDelete',
                 'vAlign'    => 'middle',
             ],
-           /*[
+           [
                 'label'  => '',
                 'format' => 'raw',
-                'value'  => function ($row) use ($catalogId, $entityId, $valueAttributes) {
-                    $column = array_column($valueAttributes, 'attributeId');
+                'value'  => function ($row) use ($catalogId, $entityId/*, $valueAttributes*/) {
+                    /*$column = array_column($valueAttributes, 'attributeId');
                     $key    = array_search($row->id, $column);
                     
                     if ($key === false) {
                         return '';
-                    }
-                    
+                    }*/
+                    // urlencode(base64_encode(json_encode($idArray)))
+                    $ids = explode(' / ', $row['valueId']);
+                    $ids = urlencode(base64_encode(json_encode($ids)));
                     $items = [
                         [
                             'label' => 'Редактировать',
                             'url'   => Url::to([
                                 'update',
-                                'typeValueId'        => $row['typeValueId'],
-                                'valueId'            => $valueAttributes[$key]['id'],
+                                'valueId'            => $ids,
                                 'entityId'           => $entityId,
                                 'catalogId'          => $catalogId,
-                                'catalogAttributeId' => $valueAttributes[$key]['ca_id'],
+                                'typeValueId'        => $row['typeValueId'],
+                                //'catalogAttributeId'        => $row['catalogAttributeId'],
+                                //'catalogEntityId'        => $row['catalogEntityId'],
+                                /*'catalogAttributeId' => $valueAttributes[$key]['ca_id'],*/
                                 'dictionaryId'       => $row['dictionaryId'] ?? 0,
                             ]),
                         ],
@@ -130,7 +134,7 @@ class ValueGrid extends BaseGrid
                 },
                 'width'  => '80px',
                 'vAlign' => 'middle',
-            ],*/
+            ],
         ];
     }
     

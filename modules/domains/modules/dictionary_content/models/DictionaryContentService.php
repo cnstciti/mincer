@@ -79,11 +79,14 @@ class DictionaryContentService
      */
     public static function dataForSelect2(int $dictionaryId): array
     {
-        return ArrayHelper::map(
-            DictionaryContentTable::findAll(['dictionaryId' => $dictionaryId, 'isDelete' => 0]),
-            'id',
-            'value'
-        );
+
+        return $dictionaryId
+            ? ArrayHelper::map(
+                DictionaryContentTable::findAll(['dictionaryId' => $dictionaryId, 'isDelete' => 0]),
+                'id',
+                'value'
+            )
+            : [];
     }
     
 }

@@ -3,6 +3,7 @@
 namespace modules\domains\modules\value\models\values;
 
 use Exception;
+use modules\domains\modules\dictionary\models\DictionaryTable;
 use modules\domains\modules\dictionary_content\models\DictionaryContentTable;
 use modules\domains\modules\value\models\ValueSetService;
 use modules\domains\modules\value\models\ValueSetTable;
@@ -15,17 +16,15 @@ class ValueSet extends ValueObject
      */
     protected function existValue(
         array $value,
-        int $dictionaryId,
-        string $dictionaryName
+        int $dictionaryId
     ): int {
         // ищем переданное значение в содержании словаря
         $dictionaryContent = $this->getDictionaryContent(
             $value,
-            $dictionaryId,
-            $dictionaryName
+            $dictionaryId
         );
         
-        // ищем, существует ли запись с таком значением в БД
+        // ищем, существует ли запись с таким значением в БД
         if ($valueSet = ValueSetTable::findOne([
                 'dictionaryContentId' => $dictionaryContent->id
             ])
@@ -41,13 +40,11 @@ class ValueSet extends ValueObject
      */
     protected function computeValue(
         array $value,
-        int $dictionaryId,
-        string $dictionaryName
+        int $dictionaryId
     ): int {
         return $this->getDictionaryContent(
             $value,
-            $dictionaryId,
-            $dictionaryName
+            $dictionaryId
         )->id;
     }
     
@@ -78,17 +75,14 @@ class ValueSet extends ValueObject
     /**
      * @param array  $value
      * @param int    $dictionaryId
-     * @param string $dictionaryName
      *
      * @return DictionaryContentTable
      * @throws Exception
      */
-    private function getDictionaryContent(
-        array $value,
-        int $dictionaryId,
-        string $dictionaryName
-    ): DictionaryContentTable
+    private function getDictionaryContent(array $value, int $dictionaryId): DictionaryContentTable
     {
+        $this->checkParamDictionaryContent($value, $dictionaryId);
+
         $dictionaryContent = DictionaryContentTable::findOne([
             'value'        => $value['value'],
             'dictionaryId' => $dictionaryId,
@@ -98,7 +92,7 @@ class ValueSet extends ValueObject
             throw new Exception(sprintf(
                 "Не найдено значение '%s' в справочнике '%s' (ИД: %d)",
                 $value['value'],
-                $dictionaryName,
+                DictionaryTable::findOne(['id' => $dictionaryId])->name,
                 $dictionaryId
             ));
         }
@@ -106,5 +100,20 @@ class ValueSet extends ValueObject
         return $dictionaryContent;
     }
 
-    
+    /**
+     * @param array $value
+     * @param int $dictionaryId
+     * @return void
+     * @throws Exception
+     */
+    private function checkParamDictionaryContent(array $value, int $dictionaryId): void
+    {
+        if (!$value['value']) {
+            throw new Exception("Не определен параметр 'value[value]'");
+        }
+        if (!$dictionaryId) {
+            throw new Exception("Не определен параметр 'dictionaryId'");
+        }
+    }
+
 }

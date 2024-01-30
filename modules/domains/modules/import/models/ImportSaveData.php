@@ -51,8 +51,8 @@ class ImportSaveData
             $value,
             ImportGetData::typeId($attribute),
             self::$maxValueId,
-            ImportGetData::dictionaryId($attribute),
-            ImportGetData::dictionaryName($attribute)
+            ImportGetData::dictionaryId($attribute)/*,
+            ImportGetData::dictionaryName($attribute)*/
         );
     }
     

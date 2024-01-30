@@ -10,6 +10,7 @@ use modules\domains\modules\type_value\models\TypeValueService;
 use modules\domains\modules\value\models\EavService;
 use modules\domains\modules\value\models\values\ValueFactory;
 use modules\domains\modules\value\models\ValueService;
+use modules\domains\modules\value\models\ValueTable;
 use Throwable;
 use Yii;
 use yii\web\Controller;
@@ -43,22 +44,37 @@ class DefaultController extends Controller
      *
      */
     public function actionUpdate(
-        int $catalogId,
+        string $valueId,
         int $entityId,
+        int $catalogId,
         int $typeValueId,
-        int $valueId,
-        int $catalogAttributeId,
         int $dictionaryId
     ) {
+        $valueId = json_decode(base64_decode(urldecode($valueId)));
+
         $typeName = TypeValueService::getName($typeValueId);
         
         $valueObject = ValueFactory::getValueObject($typeName);
         
-        $model = $valueObject->getModel($valueId);
-        
+        $model = $valueObject->getModel((int)$valueId[0]);
+
         if ($this->request->isPost
             && $model->load($this->request->post())
         ) {
+            $maxValueId = ValueTable::lastId();
+            foreach ($valueId as $id) {
+                $value = [
+                    'valueId' => $id,
+                    'value' => $model[$valueObject->getValueName()],
+                ];
+                $valueObject->insert(
+                   $value,
+                   $typeValueId,
+                $maxValueId,
+                   $dictionaryId
+                );
+            }
+            /*
             $valueName = $valueObject->getValueName();
             if ($model->getAttribute($valueName) != $model->getOldAttribute($valueName)) {
                 $value          = [
@@ -71,7 +87,11 @@ class DefaultController extends Controller
                 $dictionaryName = $model->hasAttribute('dictionaryName')
                     ? $model->dictionaryName
                     : '';
-                
+                insert(
+                    array $value,
+                        int $typeId,
+        int &$maxValueId,
+        int $dictionaryId
                 // TODO в транзакцию упаковать
                 /*
                 $newValueId = $valueObject->insert(
@@ -87,7 +107,7 @@ class DefaultController extends Controller
                     $valueId,
                     $newValueId
                 );*/
-            }
+            //}
             //int $catalogEntityId,
 
             $this->redirect(['index', 'entityId' => $entityId, 'catalogId' => $catalogId]);
@@ -114,13 +134,7 @@ class DefaultController extends Controller
             'catalogId'    => $catalogId,
             'entityId'     => $entityId,
             'typeName'     => $typeName,
-            'dictionaries' => DictionaryContentService::dataForSelect2($dictionaryId),
-            
-            /* 'attributeModel'     => $attributeModel,
-             'fullNameParamModel' => $fullNameParamModel,
-             'title'              => self::getCatalogAttributeTitle($catalogId),
-             'units'              => UnitService::dataForSelect2(),
-             'types'              => TypeValueService::dataForSelect2(),*/
+            'dictionaries' => DictionaryContentService::dataForSelect2($dictionaryId ?? 0),
         ]);
     }
     /*

@@ -22,5 +22,15 @@ class ValueSetTable extends BaseTable
     {
         return '{{%value_set}}';
     }
-    
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'dictionaryContentId' => 'Значение',
+        ];
+    }
+
 }

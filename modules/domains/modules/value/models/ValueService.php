@@ -41,9 +41,10 @@ class ValueService
         return ValueGrid::get(
             $this->getDataProvider((int)$queryParams['catalogId'], (int)$queryParams['entityId']),
             $title,
-            (int)$queryParams['catalogId'],
             (int)$queryParams['entityId'],
-            $this->getValueAttributes((int)$queryParams['catalogId'], (int)$queryParams['entityId'])
+            (int)$queryParams['catalogId']
+        /*,
+            $this->getValueAttributes((int)$queryParams['catalogId'], (int)$queryParams['entityId'])*/
         );
     }
     
@@ -103,8 +104,10 @@ class ValueService
                     vi.value AS value,
                     a.name as attributeName,
                     tv.name as typeName,
+                    tv.id as typeValueId,
                     u.shortName as unitName,
                     '' as dictionaryName,
+                    0 as dictionaryId,
                     v.isDelete AS isDelete
             FROM value_int vi
                     LEFT JOIN value v ON v.id=vi.id
@@ -121,8 +124,10 @@ class ValueService
                     vf.value AS value,
                     a.name as attributeName,
                     tv.name as typeName,
+                    tv.id as typeValueId,
                     u.shortName as unitName,
                     '' as dictionaryName,
+                    0 as dictionaryId,
                     v.isDelete AS isDelete
             FROM value_float vf
                      LEFT JOIN value v ON v.id=vf.id
@@ -139,8 +144,10 @@ class ValueService
                     vs.value AS value,
                     a.name as attributeName,
                     tv.name as typeName,
+                    tv.id as typeValueId,
                     u.shortName as unitName,
                     '' as dictionaryName,
+                    0 as dictionaryId,
                     v.isDelete AS isDelete
             FROM value_string vs
                      LEFT JOIN value v ON v.id=vs.id
@@ -157,8 +164,10 @@ class ValueService
                     vt.value AS value,
                     a.name as attributeName,
                     tv.name as typeName,
+                    tv.id as typeValueId,
                     u.shortName as unitName,
                     '' as dictionaryName,
+                    0 as dictionaryId,
                     v.isDelete AS isDelete
             FROM value_text vt
                      LEFT JOIN value v ON v.id=vt.id
@@ -175,8 +184,10 @@ class ValueService
                     GROUP_CONCAT(dc.value SEPARATOR ' / ') AS value,
                     a.name as attributeName,
                     tv.name as typeName,
+                    tv.id as typeValueId,
                     u.shortName as unitName,
                     d.name as dictionaryName,
+                    d.id as dictionaryId,
                     GROUP_CONCAT(v.isDelete SEPARATOR ' / ') AS isDelete
             FROM value_set vs
                     LEFT JOIN value v ON v.id=vs.id
@@ -311,7 +322,7 @@ class ValueService
             ],
         ]);
     }
-    
+    /*
     public static function getValueAttributes(int $catalogId, int $entityId): array
     {
         $query = "
@@ -422,6 +433,6 @@ class ValueService
                          ->getDb()
                          ->createCommand($query, $vars)
                          ->queryAll();
-    }
+    }*/
     
 }
