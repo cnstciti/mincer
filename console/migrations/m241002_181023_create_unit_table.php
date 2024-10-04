@@ -21,7 +21,7 @@ class m241002_181023_create_unit_table extends Migration
         }
         
         $this->createTable(self::TABLE_NAME, [
-            'id' => $this->primaryKey()->comment('ИД'),
+            'id' => $this->primaryKey()->unsigned()->comment('ИД'),
             'name' => $this->string(128)->notNull()->unique()->comment('Наименование'),
             'shortName' => $this->string(128)->notNull()->comment('Короткое наименование'),
             'createdAt' => $this->timestamp()->notNull()->comment('Дата создания'),

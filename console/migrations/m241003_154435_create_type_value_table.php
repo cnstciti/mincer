@@ -21,7 +21,7 @@ class m241003_154435_create_type_value_table extends Migration
         }
         
         $this->createTable(self::TABLE_NAME, [
-            'id' => $this->primaryKey()->comment('ИД'),
+            'id' => $this->primaryKey()->unsigned()->comment('ИД'),
             'name' => $this->string(128)->notNull()->unique()->comment('Наименование'),
             'createdAt' => $this->timestamp()->notNull()->comment('Дата создания'),
             'updatedAt' => $this->timestamp()->notNull()->comment('Дата изменения'),
