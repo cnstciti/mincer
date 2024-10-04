@@ -1,12 +1,12 @@
 <?php declare(strict_types = 1);
 
-namespace modules\domains\modules\type_value\controllers;
+namespace modules\domains\modules\dictionary\controllers;
 
 use Exception;
 use modules\domains\Module as DomainsModule;
-use modules\domains\modules\type_value\models\TypeValueForm;
-use modules\domains\modules\type_value\models\TypeValueService;
-use modules\domains\modules\type_value\models\TypeValueSearch;
+use modules\domains\modules\dictionary\models\DictionaryForm;
+use modules\domains\modules\dictionary\models\DictionarySearch;
+use modules\domains\modules\dictionary\models\DictionaryService;
 use yii\web\Controller;
 use yii\web\Response;
 
@@ -14,34 +14,34 @@ class DefaultController extends Controller
 {
     
     /**
-     * Список типов значений
+     * Список словарей
      *
      * @return string
      * @throws Exception
      */
     public function actionIndex(): string
     {
-        $service = new TypeValueService();
-    
+        $service = new DictionaryService();
+        
         return $this->render('index', [
             'title' => $service->getTitle(),
             'grid'  => $service->getGrid(
-                new TypeValueSearch(),
+                new DictionarySearch(),
                 $this->request->queryParams,
-                DomainsModule::getInstance()->editTypeValue(),
+                DomainsModule::getInstance()->editDictionary()
             ),
         ]);
     }
 
     /**
-     * Создание типа значения
+     * Создание словаря
      *
      * @throws Exception
      */
     public function actionCreate()
     {
-        $service = new TypeValueService();
-        $model = $service->getForm(new TypeValueForm());
+        $service = new DictionaryService();
+        $model = $service->getForm(new DictionaryForm());
         
         if ($this->request->isPost
             && $model->load($this->request->post())
@@ -57,16 +57,16 @@ class DefaultController extends Controller
     }
     
     /**
-     * Редактирование типа значения
+     * Редактирование словаря
      *
-     * @param int $typeValueId
+     * @param int $dictionaryId
      *
      * @throws Exception
      */
-    public function actionUpdate(int $typeValueId)
+    public function actionUpdate(int $dictionaryId)
     {
-        $service = new TypeValueService();
-        $model = $service->getForm(new TypeValueForm(), $typeValueId);
+        $service = new DictionaryService();
+        $model = $service->getForm(new DictionaryForm(), $dictionaryId);
         
         if ($this->request->isPost
             && $model->load($this->request->post())
