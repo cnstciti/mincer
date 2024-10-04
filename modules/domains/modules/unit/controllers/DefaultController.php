@@ -26,9 +26,9 @@ class DefaultController extends Controller
         return $this->render('index', [
             'title' => $service->getTitle(),
             'grid'  => $service->getGrid(
-                searchModel: new UnitSearch(),
-                queryParams: $this->request->queryParams,
-                isEdit:      DomainsModule::getInstance()->editUnit(),
+                new UnitSearch(),
+                $this->request->queryParams,
+                DomainsModule::getInstance()->editUnit(),
             ),
         ]);
     }
@@ -36,10 +36,9 @@ class DefaultController extends Controller
     /**
      * Создание единицы измерения
      *
-     * @return string|Response
      * @throws Exception
      */
-    public function actionCreate(): string|Response
+    public function actionCreate()
     {
         $service = new UnitService();
         $model   = $service->getForm(new UnitForm());
@@ -62,10 +61,9 @@ class DefaultController extends Controller
      *
      * @param int $unitId
      *
-     * @return string|Response
      * @throws Exception
      */
-    public function actionUpdate(int $unitId): string|Response
+    public function actionUpdate(int $unitId)
     {
         $service = new UnitService();
         $model   = $service->getForm(new UnitForm(), $unitId);
