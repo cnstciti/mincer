@@ -82,8 +82,8 @@ class DictionaryContentGrid extends BaseGrid
                                 'label' => 'Редактировать',
                                 'url'   => Url::to([
                                     'update',
-                                    'dictionaryContentId' => $row->id,
                                     'dictionaryId'        => $row->dictionaryId,
+                                    'dictionaryContentId' => $row->id,
                                 ]),
                             ],
                         ]
