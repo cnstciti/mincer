@@ -14,7 +14,7 @@ use yii\web\View;
  * @var array               $attributes
  */
 
-$viewName                      = 'Выбор существующего атрибута';
+$viewName = 'Выбор существующего атрибута';
 $this->title = sprintf(
     '%s :: %s',
     Yii::$app->name,
