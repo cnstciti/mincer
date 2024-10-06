@@ -76,7 +76,8 @@ class TypeValueService
     public function dataForSelect2(): array
     {
         return ArrayHelper::map(
-            TypeValueTable::findAll([/*'isDelete' => 0*/]),
+            //TypeValueTable::findAll([/*'isDelete' => 0*/]),
+            TypeValueTable::find()->all(),
             'id',
             'name'
         );
