@@ -88,7 +88,8 @@ class DictionaryService
     public function dataForSelect2(): array
     {
         return ArrayHelper::map(
-            DictionaryTable::findAll([/*'isDelete' => 0*/]),
+            //DictionaryTable::findAll([/*'isDelete' => 0*/]),
+            DictionaryTable::find()->all(),
             'id',
             'name'
         );

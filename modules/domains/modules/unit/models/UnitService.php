@@ -75,14 +75,15 @@ class UnitService
     public function dataForSelect2(): array
     {
         return ArrayHelper::map(
-        UnitTable::findAll([/*'isDelete' => 0*/]),
-            'id',
-            function ($row) {
-                return sprintf(
-                    '%s (%s)',
-                    $row->shortName,
-                    $row->name
-                );
+            //UnitTable::findAll([/*'isDelete' => 0*/]),
+            UnitTable::find()->all(),
+                'id',
+                function ($row) {
+                    return sprintf(
+                        '%s (%s)',
+                        $row->shortName,
+                        $row->name
+                    );
             });
     }
     
