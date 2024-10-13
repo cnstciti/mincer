@@ -74,26 +74,26 @@ class EntityGrid extends BaseGrid
                         [
                             'label' => 'Значения',
                             'url'   => Url::to([
-                                '/domains/value/default/index',
-                                'entityId'  => $row->id,
+                                '/domains/values/default/index',
                                 'catalogId' => $catalogId,
+                                'entityId'  => $row->id,
                             ]),
                         ],
-                       /* [
+                        [
                             'label' => 'Демо',
                             'url'   => Url::to([
                                 'demo',
-                                'entityId'  => $row->id,
                                 'catalogId' => $catalogId,
+                                'entityId'  => $row->id,
                             ]),
-                        ],*/
+                        ],
                         '<div class="dropdown-divider"></div>',
                         [
                             'label' => 'Редактировать',
                             'url'   => Url::to([
                                 'update',
-                                'entityId'  => $row->id,
                                 'catalogId' => $catalogId,
+                                'entityId'  => $row->id,
                             ]),
                         ],
                     ];

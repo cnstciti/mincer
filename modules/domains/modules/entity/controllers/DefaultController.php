@@ -40,7 +40,33 @@ class DefaultController extends Controller
             ),
         ]);
     }
-
+    
+    /**
+     * Редактирование продукта
+     *
+     * @param int $catalogId
+     * @param int $entityId
+     * @throws Exception
+     */
+    public function actionUpdate(int $catalogId, int $entityId)
+    {
+        $service = new EntityService();
+        $model = $service->getForm(new EntityForm(), $entityId);
+        
+        if ($this->request->isPost
+            && $model->load($this->request->post())
+            && $model->save()
+        ) {
+            return $this->redirectIndex($catalogId);
+        }
+        
+        return $this->render('update', [
+            'model'     => $model,
+            'title'     => $this->getCatalogEntityTitle($catalogId),
+            'catalogId' => $catalogId,
+        ]);
+    }
+    
     /**
      * Создание продукта
      *
@@ -79,32 +105,6 @@ class DefaultController extends Controller
     }
     
     /**
-     * Редактирование продукта
-     *
-     * @param int $entityId
-     * @param int $catalogId
-     * @throws Exception
-     */
-    public function actionUpdate(int $entityId, int $catalogId)
-    {
-        $service = new EntityService();
-        $model = $service->getForm(new EntityForm(), $entityId);
-        
-        if ($this->request->isPost
-            && $model->load($this->request->post())
-            && $model->save()
-        ) {
-            return $this->redirectIndex($catalogId);
-        }
-        
-        return $this->render('update', [
-            'model'     => $model,
-            'title'     => $this->getCatalogEntityTitle($catalogId),
-            'catalogId' => $catalogId,
-        ]);
-    }
-    
-    /**
      * Заголовок 'Каталог. Продукт'
      *
      * @param int $catalogId
@@ -130,7 +130,7 @@ class DefaultController extends Controller
         return $this->redirect(['index', 'catalogId' => $catalogId]);
     }
 /*
-    public function actionDemo(int $entityId, int $catalogId)
+    public function actionDemo(int $catalogId, int $entityId)
     {
         $valueService = new ValueService();
         

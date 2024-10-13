@@ -102,8 +102,8 @@ class AttributeGrid extends BaseGrid
                                 'label' => 'Редактировать',
                                 'url'   => Url::to([
                                     'update',
-                                    'attributeId' => $row->id,
                                     'catalogId'   => $catalogId,
+                                    'attributeId' => $row->id,
                                 ]),
                             ],
                         ]

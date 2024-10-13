@@ -3,6 +3,7 @@
 namespace modules\domains\modules\catalog_entity\models;
 
 use Exception;
+use Throwable;
 
 class CatalogEntityService
 {
@@ -21,7 +22,7 @@ class CatalogEntityService
             $t->catalogId = $catalogId;
             $t->entityId  = $entityId;
             $t->save();
-        } catch(Exception $e) {
+        } catch (Throwable $e) {
             throw new Exception('Ошибка при создании CatalogEntity. ' . $e->getMessage());
         }
     }

@@ -43,7 +43,34 @@ class DefaultController extends Controller
             ),
         ]);
     }
-
+    
+    /**
+     * Редактирование содержания словаря
+     *
+     * @param int $dictionaryId
+     * @param int $dictionaryContentId
+     * @throws Exception
+     */
+    public function actionUpdate(int $dictionaryId, int $dictionaryContentId)
+    {
+        $serviceDic = new DictionaryService();
+        $serviceDicCont = new DictionaryContentService();
+        
+        $model = $serviceDicCont->getForm(new DictionaryContentForm(), $dictionaryContentId);
+        
+        if ($this->request->isPost
+            && $model->load($this->request->post())
+            && $model->save()
+        ) {
+            return $this->redirectIndex($dictionaryId);
+        }
+        
+        return $this->render('update', [
+            'model'          => $model,
+            'dictionaryName' => $serviceDic->getName($dictionaryId),
+        ]);
+    }
+    
     /**
      * Создание содержания словаря
      *
@@ -67,34 +94,6 @@ class DefaultController extends Controller
         }
         
         return $this->render('create', [
-            'model'          => $model,
-            'dictionaryName' => $serviceDic->getName($dictionaryId),
-        ]);
-    }
-    
-    /**
-     * Редактирование содержания словаря
-     *
-     * @param int $dictionaryContentId
-     * @param int $dictionaryId
-     *
-     * @throws Exception
-     */
-    public function actionUpdate(int $dictionaryId, int $dictionaryContentId)
-    {
-        $serviceDic = new DictionaryService();
-        $serviceDicCont = new DictionaryContentService();
-    
-        $model = $serviceDicCont->getForm(new DictionaryContentForm(), $dictionaryContentId);
-        
-        if ($this->request->isPost
-            && $model->load($this->request->post())
-            && $model->save()
-        ) {
-            return $this->redirectIndex($dictionaryId);
-        }
-        
-        return $this->render('update', [
             'model'          => $model,
             'dictionaryName' => $serviceDic->getName($dictionaryId),
         ]);
