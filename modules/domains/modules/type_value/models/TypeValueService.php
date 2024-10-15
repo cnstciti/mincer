@@ -8,6 +8,13 @@ use yii\helpers\ArrayHelper;
 
 class TypeValueService
 {
+    public const FLOAT = 'float';
+    public const INT = 'int';
+    public const STRING = 'string';
+    public const TEXT = 'text';
+    public const ENUM = 'enum';
+    public const SET = 'set';
+    
     private const TITLE = 'Типы значений';
     
     

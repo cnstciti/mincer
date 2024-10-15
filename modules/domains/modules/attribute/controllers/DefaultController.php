@@ -94,7 +94,7 @@ class DefaultController extends Controller
      *
      * @throws Exception
      */
-    public function actionUpdate(int $attributeId, int $catalogId)
+    public function actionUpdate(int $catalogId, int $attributeId)
     {
         $service = new AttributeService();
         $model = $service->getForm(new AttributeForm(), $attributeId);

@@ -3,6 +3,7 @@
 namespace modules\domains\modules\catalog_attribute\models;
 
 use Exception;
+use Throwable;
 
 class CatalogAttributeService
 {
@@ -21,7 +22,7 @@ class CatalogAttributeService
             $t->catalogId   = $catalogId;
             $t->attributeId = $attributeId;
             $t->save();
-        } catch(Exception $e) {
+        } catch (Throwable $e) {
             throw new Exception('Ошибка при создании CatalogAttribute. ' . $e->getMessage());
         }
     }

@@ -92,7 +92,7 @@ class EntityService
             $t->name      = $entityName;
             $t->isDelete  = $isDelete;
             $t->save();
-        } catch(Exception $e) {
+        } catch (Throwable $e) {
             throw new Exception('Ошибка при создании Entity. ' . $e->getMessage());
         }
     }

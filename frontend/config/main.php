@@ -1,4 +1,7 @@
 <?php
+
+use yii\log\FileTarget;
+
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
     require __DIR__ . '/../../common/config/params-local.php',
@@ -29,7 +32,7 @@ return [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
                 [
-                    'class' => \yii\log\FileTarget::class,
+                    'class' => FileTarget::class,
                     'levels' => ['error', 'warning'],
                 ],
             ],
@@ -71,8 +74,47 @@ return [
                 'entity' => [
                     'class' => 'modules\domains\modules\entity\Module',
                 ],
+                'catalog_attribute' => [
+                    'class' => 'modules\domains\modules\catalog_attribute\Module',
+                ],
+                'catalog_entity' => [
+                    'class' => 'modules\domains\modules\catalog_entity\Module',
+                ],
+                'eav' => [
+                    'class' => 'modules\domains\modules\eav\Module',
+                ],
                 'value' => [
                     'class' => 'modules\domains\modules\value\Module',
+                ],
+                'simple_type' => [
+                    'class' => 'modules\domains\modules\simple_type\Module',
+                ],
+                'value_int' => [
+                    'class' => 'modules\domains\modules\value_int\Module',
+                ],
+                'value_float' => [
+                    'class' => 'modules\domains\modules\value_float\Module',
+                ],
+                'value_string' => [
+                    'class' => 'modules\domains\modules\value_string\Module',
+                ],
+                'value_text' => [
+                    'class' => 'modules\domains\modules\value_text\Module',
+                ],
+                'value_enum' => [
+                    'class' => 'modules\domains\modules\value_enum\Module',
+                ],
+                'set_type' => [
+                    'class' => 'modules\domains\modules\set_type\Module',
+                ],
+                'value_image' => [
+                    'class' => 'modules\domains\modules\value_image\Module',
+                ],
+                'image_type' => [
+                    'class' => 'modules\domains\modules\image_type\Module',
+                ],
+                'values' => [
+                    'class' => 'modules\domains\modules\values\Module',
                 ],
               /*  'export' => [
                     'class' => 'modules\domains\modules\export\Module',
