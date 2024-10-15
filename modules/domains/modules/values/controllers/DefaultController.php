@@ -11,11 +11,13 @@ use modules\domains\modules\image_type\models\ImageTypeService;
 use modules\domains\modules\set_type\models\SetTypeSearch;
 use modules\domains\modules\set_type\models\SetTypeService;
 use modules\domains\modules\simple_type\models\SimpleTypeSearch;
+use modules\domains\modules\simple_type\models\SimpleTypeSelectForm;
 use modules\domains\modules\simple_type\models\SimpleTypeService;
 use modules\domains\modules\value_image\models\ValueImageService;
 use modules\domains\modules\value_set\models\ValueSetService;
 use modules\domains\modules\values\models\ValuesService;
 use Throwable;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\UploadedFile;
 
@@ -248,7 +250,15 @@ class DefaultController extends Controller
             (new EntityService())->getTitle()
         );
     }
-    /*
+    
+    /**
+     * @param int    $catalogId
+     * @param int    $entityId
+     * @param string $attributeName
+     * @param int    $attributeId
+     * @return string
+     * @throws Exception
+     */
     public function actionSimpleTypeSelect(
         int $catalogId,
         int $entityId,
@@ -261,7 +271,7 @@ class DefaultController extends Controller
         if ($this->request->isPost
             && $model->load($this->request->post())
         ) {
-            (new ValueService())->copyValue(
+            (new SimpleTypeService)->copyValue(
                 $entityId,
                 $catalogId,
                 $attributeId,
@@ -286,6 +296,12 @@ class DefaultController extends Controller
         ]);
     }
     
+    /**
+     * @param int $catalogId
+     * @param int $entityId
+     * @return string
+     * @throws Exception
+     */
     public function actionSimpleTypeSelectAll(
         int $catalogId,
         int $entityId
@@ -296,7 +312,7 @@ class DefaultController extends Controller
         if ($this->request->isPost
             && $model->load($this->request->post())
         ) {
-            (new ValueService())->copyValueAll(
+            (new SimpleTypeService)->copyValueAll(
                 $entityId,
                 $catalogId,
                 intval($model->selectEntity)
@@ -318,5 +334,5 @@ class DefaultController extends Controller
             ),
         ]);
     }
-    */
+    
 }
