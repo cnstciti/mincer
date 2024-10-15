@@ -40,10 +40,10 @@ $items = [
         'label'   => 'Списочные типы',
         'content' => $setTypeGrid,
     ],
-    /*[
+    [
         'label'   => 'Изображения',
         'content' => $imgTypeGrid,
-    ],*/
+    ],
 ];
 
 try {

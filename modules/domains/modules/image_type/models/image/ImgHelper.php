@@ -1,13 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace modules\domains\modules\value\models\image;
+namespace modules\domains\modules\image_type\models\image;
 
 use Exception;
-use phpDocumentor\Reflection\DocBlock\Tags\Throws;
 use RuntimeException;
 use yii\helpers\BaseFileHelper;
 use yii\imagine\Image;
-use yii\web\UploadedFile;
 
 class ImgHelper
 {
@@ -49,6 +47,12 @@ class ImgHelper
         );
     }
     
+    /**
+     * @param string     $alias
+     * @param ImgFileDto $dto
+     * @return ImgFileDto
+     * @throws Exception
+     */
     public function convertToWebp(string $alias, ImgFileDto $dto): ImgFileDto
     {
         switch ($dto->file()->extension()) {

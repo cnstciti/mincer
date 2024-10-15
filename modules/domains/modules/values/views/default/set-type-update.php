@@ -53,7 +53,7 @@ try {
     echo $form->field($model, 'dictionaryContentId')
               ->widget(Select2::class, [
                       'data'          => $dictionaries,
-                      'maintai_nOrder' => true,
+                      'maintainOrder' => true,
                       'options'       => [
                           'placeholder' => 'Выберите значения ...',
                           'multiple'    => true,

@@ -5,7 +5,6 @@ namespace modules\domains\modules\values\models;
 use Exception;
 use modules\domains\BaseTable;
 use modules\domains\modules\eav\models\EavService;
-use modules\domains\modules\eav\models\EavTable;
 use modules\domains\modules\type_value\models\TypeValueService;
 use modules\domains\modules\value\models\ValueService;
 use modules\domains\modules\value_enum\models\ValueEnumService;
@@ -13,7 +12,6 @@ use modules\domains\modules\value_float\models\ValueFloatService;
 use modules\domains\modules\value_int\models\ValueIntService;
 use modules\domains\modules\value_string\models\ValueStringService;
 use modules\domains\modules\value_text\models\ValueTextService;
-use Throwable;
 
 class ValuesService
 {
@@ -102,33 +100,9 @@ class ValuesService
     
     //---------------------
     
-    /**
-     * Грид для изображений
-     *
-     * @param ImgTypeSearch $searchModel
-     * @param array         $queryParams
-     * @param string        $title
-     * @return string
-     * @throws Throwable
-     */
-    public function getImgTypeGrid(
-        ImgTypeSearch $searchModel,
-        array $queryParams,
-        string $title/*,
-        int $entityId,
-        int $catalogId*/
-    ): string
-    {
-        return ImgTypeGrid::get(
-            $searchModel,
-            $searchModel->search($queryParams),
-            $title/*,
-            $entityId,
-            $catalogId*/
-        );
-    }
+
     
-   
+   /*
     public function getSimpleTypeForDemo(int $entityId, int $catalogId): array
     {
         return SimpleTypeDataView::find()
@@ -203,5 +177,5 @@ class ValuesService
             );
         }
     }
-    
+    */
 }

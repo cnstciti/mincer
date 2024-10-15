@@ -1,11 +1,10 @@
 <?php declare(strict_types = 1);
 
 use kartik\file\FileInput;
-use modules\domains\modules\value\models\ValueImageTable;
+use modules\domains\modules\value_image\models\ValueImageTable;
 use yii\bootstrap5\ActiveForm;
 use yii\helpers\Html;
 use yii\web\View;
-use modules\domains\modules\value\models\values\TypeValue;
 
 /**
  * @var View            $this
@@ -34,7 +33,7 @@ $this->params['breadcrumbs'][] = [
 $this->params['breadcrumbs'][] = [
     'label' => $title,
     'url'   => [
-        '/domains/value/default/index',
+        '/domains/values/default/index',
         'catalogId' => $catalogId,
         'entityId'  => $entityId,
     ],

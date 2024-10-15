@@ -29,7 +29,8 @@
         "kartik-v/yii2-widget-select2": "dev-master",
         "imangazaliev/didom": "^1.15",
         "diecoding/yii2-slick": "^1.0",
-        "phpoffice/phpspreadsheet": "^2.0"
+        "phpoffice/phpspreadsheet": "^2.0",
+        "ext-gd": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

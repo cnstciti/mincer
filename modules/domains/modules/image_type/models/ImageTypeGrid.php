@@ -1,30 +1,27 @@
 <?php declare(strict_types = 1);
 
-namespace modules\domains\modules\value\models;
+namespace modules\domains\modules\image_type\models;
 
 use kartik\bs5dropdown\ButtonDropdown;
-use kartik\grid\GridView;
 use modules\domains\BaseGrid;
 use Throwable;
-use Yii;
 use yii\data\ActiveDataProvider;
-use yii\helpers\Html;
 use yii\helpers\Url;
 
-class ImgTypeGrid extends BaseGrid
+class ImageTypeGrid extends BaseGrid
 {
     
     /**
      * Возвращает грид
      *
-     * @param ImgTypeSearch      $searchModel
+     * @param ImageTypeSearch      $searchModel
      * @param ActiveDataProvider $dataProvider
      * @param string             $title
      * @return string
      * @throws Throwable
      */
     public static function get(
-        ImgTypeSearch $searchModel,
+        ImageTypeSearch $searchModel,
         ActiveDataProvider $dataProvider,
         string $title/*,
         int $entityId,
@@ -44,14 +41,14 @@ class ImgTypeGrid extends BaseGrid
                 ['select', 'entityId' => $entityId, 'catalogId' => $catalogId],
                 ['class' => 'btn btn-outline-primary',]
             );*/
-    
+        
         return self::widget([
             'dataProvider' => $dataProvider,
             'filterModel'  => $searchModel,
             'columns'      => self::columns(),
         ]);
     }
-
+    
     /**
      * Возвращает колонки грида
      *
@@ -256,7 +253,7 @@ $gridColumns = [
                 'group' => true,
                 'vAlign'      => 'middle',
             ],*/
-            [
+            /*[
                 'class' => 'kartik\grid\ExpandRowColumn',
                 'width' => '50px',
                 'value' => function ($model, $key, $index, $column) {
@@ -264,13 +261,13 @@ $gridColumns = [
                 },
                 // uncomment below and comment detail if you need to render via ajax
                 // 'detailUrl' => Url::to(['/site/book-details']),
-                'detail' => function ($model, $key, $index, $column) {
+                /*'detail' => function ($model, $key, $index, $column) {
                     return Yii::$app->controller->renderPartial('_expand-row-details', ['model' => $model]);
                 },
                 //'headerOptions' => ['class' => 'kartik-sheet-style'],
                 'expandOneOnly' => true,
-                //'group' => true,
-            ],
+                //'group' => true,* /
+            ],*/
             [
                 'label'       => "Группа",
                 'attribute'   => 'numGroup',
@@ -288,45 +285,44 @@ $gridColumns = [
                 'vAlign'      => 'middle',
             ],
             [
-                 'label'  => '',
-                 'format' => 'raw',
-                 'value'  => function ($row) {
-                     $items = [
-                         [
-                             'label' => 'Загрузить',
-                             'url'   => Url::to([
-                                 'load-img',
-                                 'entityId'           => $row['entityId'],
-                                 'catalogId'          => $row['catalogId'],
-                                 'catalogAttributeId' => $row['catalogAttributeId'],
-                                 'catalogEntityId'    => $row['catalogEntityId'],
-                                 'typeId'             => $row['typeId'],
-                             ]),
-                         ],
-                         '<div class="dropdown-divider"></div>',
-                         [
-                             'label' => 'Удалить',
-                             'url'   => Url::to([
-                                 'delete-img',
-                                 'entityId'  => $row['entityId'],
-                                 'catalogId' => $row['catalogId'],
-                                 'numGroup'  => $row['numGroup'],
-                             ]),
-                         ],
-                     ];
-
-                     return ButtonDropdown::widget([
-                         'label'    => 'Действия',
-                         'dropdown' => [
-                             'items' => $items,
-                         ],
-                         'buttonOptions' => ['class' => 'btn-outline-primary'],
-                     ]);
-                 },
-                 'width'  => '80px',
-                 'vAlign' => 'middle',
-             ],
+                'label'  => '',
+                'format' => 'raw',
+                'value'  => function ($row) {
+                    $items = [
+                        [
+                            'label' => 'Загрузить',
+                            'url'   => Url::to([
+                                'load-img',
+                                'entityId'           => $row['entityId'],
+                                'catalogId'          => $row['catalogId'],
+                                'catalogAttributeId' => $row['catalogAttributeId'],
+                                'catalogEntityId'    => $row['catalogEntityId'],
+                                'typeId'             => $row['typeId'],
+                            ]),
+                        ],
+                        '<div class="dropdown-divider"></div>',
+                        [
+                            'label' => 'Удалить',
+                            'url'   => Url::to([
+                                'delete-img',
+                                'entityId'  => $row['entityId'],
+                                'catalogId' => $row['catalogId'],
+                                'numGroup'  => $row['numGroup'],
+                            ]),
+                        ],
+                    ];
+                    
+                    return ButtonDropdown::widget([
+                        'label'    => 'Действия',
+                        'dropdown' => [
+                            'items' => $items,
+                        ],
+                        'buttonOptions' => ['class' => 'btn-outline-primary'],
+                    ]);
+                },
+                'width'  => '80px',
+                'vAlign' => 'middle',
+            ],
         ];
     }
-    
 }

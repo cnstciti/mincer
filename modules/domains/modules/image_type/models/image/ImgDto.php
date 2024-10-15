@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace modules\domains\modules\value\models\image;
+namespace modules\domains\modules\image_type\models\image;
 
 use Imagine\Image\ImageInterface;
 

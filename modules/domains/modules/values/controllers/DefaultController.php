@@ -6,15 +6,16 @@ use Exception;
 use modules\domains\modules\catalog\models\CatalogService;
 use modules\domains\modules\dictionary_content\models\DictionaryContentService;
 use modules\domains\modules\entity\models\EntityService;
+use modules\domains\modules\image_type\models\ImageTypeSearch;
+use modules\domains\modules\image_type\models\ImageTypeService;
 use modules\domains\modules\set_type\models\SetTypeSearch;
 use modules\domains\modules\set_type\models\SetTypeService;
 use modules\domains\modules\simple_type\models\SimpleTypeSearch;
 use modules\domains\modules\simple_type\models\SimpleTypeService;
-use modules\domains\modules\value\models\ValueImageService;
+use modules\domains\modules\value_image\models\ValueImageService;
 use modules\domains\modules\value_set\models\ValueSetService;
 use modules\domains\modules\values\models\ValuesService;
 use Throwable;
-use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\UploadedFile;
 
@@ -32,7 +33,6 @@ class DefaultController extends Controller
      */
     public function actionIndex(int $catalogId, int $entityId): string
     {
-        //$service = new ValuesService();
         $title = $this->getEntityValueTitle($entityId);
 
         return $this->render('index', [
@@ -49,14 +49,11 @@ class DefaultController extends Controller
                 $this->request->queryParams,
                 $title . '. Списочные типы'
             ),
-            /*
-            'imgTypeGrid'    => $service->getImgTypeGrid(
-                new ImgTypeSearch(),
+            'imgTypeGrid'    => (new ImageTypeService)->getGrid(
+                new ImageTypeSearch(),
                 $this->request->queryParams,
-                $title . '. Изображения'/*,
-                $entityId,
-                $catalogId* /
-            ),*/
+                $title . '. Изображения'
+            ),
             'catalogId'      => $catalogId,
             'indexTitle'     => $this->getCatalogEntityTitle($catalogId),
         ]);
@@ -167,6 +164,15 @@ class DefaultController extends Controller
         ]);
     }
     
+    /**
+     * @param int $entityId
+     * @param int $catalogId
+     * @param int $catalogAttributeId
+     * @param int $catalogEntityId
+     * @param int $typeId
+     * @return string
+     * @throws Exception
+     */
     public function actionLoadImg(
         int $entityId,
         int $catalogId,
@@ -182,9 +188,8 @@ class DefaultController extends Controller
             && $model->load($this->request->post())
             && !empty($file = UploadedFile::getInstance($model, 'file'))
         ) {
-            $service->load(
+            (new ImageTypeService)->load(
                 $file,
-                //$model,
                 $catalogAttributeId,
                 $catalogEntityId,
                 $typeId
@@ -209,7 +214,7 @@ class DefaultController extends Controller
     )
     {
         // TODO Нужна проверка, если удаляется фото, прикрепленное к нескольким продуктам!
-        $service = new ValueImageService;
+        $service = new ImageTypeService;
         $service->delete($entityId, $numGroup);
 
         $this->redirect(['index', 'entityId' => $entityId, 'catalogId' => $catalogId]);
@@ -243,7 +248,7 @@ class DefaultController extends Controller
             (new EntityService())->getTitle()
         );
     }
-    
+    /*
     public function actionSimpleTypeSelect(
         int $catalogId,
         int $entityId,
@@ -313,5 +318,5 @@ class DefaultController extends Controller
             ),
         ]);
     }
-    
+    */
 }

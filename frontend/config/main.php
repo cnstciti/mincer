@@ -107,7 +107,12 @@ return [
                 'set_type' => [
                     'class' => 'modules\domains\modules\set_type\Module',
                 ],
-                
+                'value_image' => [
+                    'class' => 'modules\domains\modules\value_image\Module',
+                ],
+                'image_type' => [
+                    'class' => 'modules\domains\modules\image_type\Module',
+                ],
                 'values' => [
                     'class' => 'modules\domains\modules\values\Module',
                 ],

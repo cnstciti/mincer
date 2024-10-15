@@ -1,10 +1,10 @@
 <?php declare(strict_types = 1);
 
-namespace modules\domains\modules\value\models;
+namespace modules\domains\modules\image_type\models;
 
 use yii\data\ActiveDataProvider;
 
-class ImgTypeSearch extends ImgTypeDataView
+class ImageTypeSearch extends ImageTypeDataView
 {
     
     /**
@@ -14,11 +14,11 @@ class ImgTypeSearch extends ImgTypeDataView
     {
         return [
             [['height', 'width', 'size'], 'integer'],
-            [['attributeName', 'typeName', 'file', 'type', 'ext'], 'string'],
+            [['attributeName', 'typeName', 'file', 'type'], 'string'],
         ];
     }
-    
-    
+
+
     /**
      * Creates data provider instance with search query applied
      *
@@ -31,18 +31,16 @@ class ImgTypeSearch extends ImgTypeDataView
         $query = self::find()
             ->where(['catalogId' => $params['catalogId'], 'entityId' => $params['entityId']]);
         
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
-        
+        $dataProvider = new ActiveDataProvider(['query' => $query]);
+
         $dataProvider->pagination->pageSize = 50;
-        
+
         $this->load($params);
         
         if ( ! $this->validate()) {
             return $dataProvider;
         }
-        
+    
         $query
             ->andFilterWhere([
                 'height' => $this->height,
@@ -53,10 +51,10 @@ class ImgTypeSearch extends ImgTypeDataView
             ->andFilterWhere(['like', 'typeName', $this->typeName])
             ->andFilterWhere(['like', 'file', $this->file])
             ->andFilterWhere(['like', 'type', $this->type])
-            ->andFilterWhere(['like', 'ext', $this->ext]);
-        
+        ;
+    
         $query->orderBy('numGroup');
-        
+    
         return $dataProvider;
     }
     
