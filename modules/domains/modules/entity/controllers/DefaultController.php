@@ -11,6 +11,8 @@ use modules\domains\modules\entity\models\EntitySearch;
 use modules\domains\modules\entity\models\EntityService;
 //use modules\domains\modules\value\models\ValueImageService;
 //use modules\domains\modules\value\models\ValueService;
+use modules\domains\modules\simple_type\models\SimpleTypeService;
+use modules\domains\modules\value_image\models\ValueImageService;
 use Throwable;
 use yii\web\Controller;
 use yii\web\Response;
@@ -129,10 +131,10 @@ class DefaultController extends Controller
     {
         return $this->redirect(['index', 'catalogId' => $catalogId]);
     }
-/*
+
     public function actionDemo(int $catalogId, int $entityId)
     {
-        $valueService = new ValueService();
+        $valueService = new SimpleTypeService();
         
         return $this->render('demo', [
             'catalogName' => (new CatalogService)->getName($catalogId),
@@ -143,5 +145,5 @@ class DefaultController extends Controller
             'setTypes' => $valueService->getSetTypeForDemo($entityId, $catalogId),
         ]);
     }
-    */
+    
 }

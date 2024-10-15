@@ -3,6 +3,7 @@
 namespace modules\domains\modules\entity\models;
 
 use Exception;
+use modules\domains\modules\catalog_entity\models\CatalogEntityTable;
 use Throwable;
 
 class EntityService
@@ -107,7 +108,6 @@ class EntityService
         return EntityTable::lastId();
     }
     
-    /*
     public function listByCatalog(int $catalogId, int $entityId): array
     {
         return EntityTable::find()
@@ -117,5 +117,6 @@ class EntityService
             ->where(['ca.catalogId' => $catalogId])
             ->andWhere('ca.entityId <> ' . $entityId)
             ->all();
-    }*/
+    }
+    
 }
