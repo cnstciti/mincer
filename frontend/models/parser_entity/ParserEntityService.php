@@ -1,12 +1,12 @@
 <?php declare(strict_types = 1);
 
-namespace modules\domains\modules\entity\models;
+namespace frontend\models\parser_entity;
 
 use Exception;
 use modules\domains\modules\catalog_entity\models\CatalogEntityTable;
 use Throwable;
 
-class EntityService
+class ParserEntityService
 {
     private const TITLE = 'Продукты';
     
@@ -23,9 +23,9 @@ class EntityService
     /**
      * Грид
      *
-     * @param array              $queryParams
+     * @param array        $queryParams
      * @param ParserEntitySearch $searchModel
-     * @param string             $title
+     * @param string       $title
      *
      * @return string
      * @throws Throwable
@@ -39,8 +39,8 @@ class EntityService
         return ParserEntityGrid::get(
             $searchModel,
             $searchModel->search($queryParams),
-            $title,
-            (int)$queryParams['catalogId']
+            $title//,
+            //(int)$queryParams['catalogId']
         );
     }
     

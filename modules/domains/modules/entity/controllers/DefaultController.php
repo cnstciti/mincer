@@ -7,8 +7,8 @@ use modules\domains\Module as DomainsModule;
 use modules\domains\modules\catalog\models\CatalogService;
 use modules\domains\modules\catalog_entity\models\CatalogEntityService;
 use modules\domains\modules\entity\models\EntityForm;
-use modules\domains\modules\entity\models\EntitySearch;
-use modules\domains\modules\entity\models\EntityService;
+use modules\domains\modules\entity\models\ParserEntitySearch;
+use modules\domains\modules\entity\models\ParserEntityService;
 //use modules\domains\modules\value\models\ValueImageService;
 //use modules\domains\modules\value\models\ValueService;
 use modules\domains\modules\simple_type\models\SimpleTypeService;
@@ -30,13 +30,13 @@ class DefaultController extends Controller
      */
     public function actionIndex(int $catalogId): string
     {
-        $service = new EntityService();
+        $service = new ParserEntityService();
         $title = $this->getCatalogEntityTitle($catalogId);
         
         return $this->render('index', [
             'title' => $title,
             'grid'  => $service->getGrid(
-                new EntitySearch(),
+                new ParserEntitySearch(),
                 $this->request->queryParams,
                 $title,
             ),
@@ -52,7 +52,7 @@ class DefaultController extends Controller
      */
     public function actionUpdate(int $catalogId, int $entityId)
     {
-        $service = new EntityService();
+        $service = new ParserEntityService();
         $model = $service->getForm(new EntityForm(), $entityId);
         
         if ($this->request->isPost
@@ -78,7 +78,7 @@ class DefaultController extends Controller
      */
     public function actionCreate(int $catalogId)
     {
-        $service = new EntityService();
+        $service = new ParserEntityService();
         $model = $service->getForm(new EntityForm());
 
         if ($this->request->isPost
@@ -117,7 +117,7 @@ class DefaultController extends Controller
         return sprintf(
             '%s. %s',
             (new CatalogService())->getName($catalogId),
-            (new EntityService())->getTitle()
+            (new ParserEntityService())->getTitle()
         );
     }
     
@@ -138,7 +138,7 @@ class DefaultController extends Controller
         
         return $this->render('demo', [
             'catalogName' => (new CatalogService)->getName($catalogId),
-            'entityName' => (new EntityService)->getName($entityId),
+            'entityName' => (new ParserEntityService)->getName($entityId),
             'catalogId' => $catalogId,
             'pictures' => (new ValueImageService)->getForDemo($entityId, $catalogId),
             'simpleTypes' => $valueService->getSimpleTypeForDemo($entityId, $catalogId),

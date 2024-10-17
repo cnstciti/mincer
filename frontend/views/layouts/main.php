@@ -44,6 +44,12 @@ AppAsset::register($this);
                 ['label' => 'Словари', 'url' => ['/domains/dictionary/default/index']],
             ],
         ],
+        [
+            'label' => 'Парсер',
+            'items' => [
+                ['label' => 'Продукты', 'url' => ['/parser-entity/index']],
+            ],
+        ],
        /* [
             'label' => 'Импорт',
             'url' => ['/domains/import/default/index']

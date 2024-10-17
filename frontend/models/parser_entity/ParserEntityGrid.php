@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace modules\domains\modules\entity\models;
+namespace frontend\models\parser_entity;
 
 use kartik\bs5dropdown\ButtonDropdown;
 use modules\domains\BaseGrid;
@@ -9,7 +9,7 @@ use yii\data\ActiveDataProvider;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-class EntityGrid extends BaseGrid
+class ParserEntityGrid extends BaseGrid
 {
     
     /**
@@ -26,21 +26,21 @@ class EntityGrid extends BaseGrid
     public static function get(
         ParserEntitySearch $searchModel,
         ActiveDataProvider $dataProvider,
-        string $title,
-        int $catalogId
+        string $title/*,
+        int $catalogId*/
     ): string
     {
         self::$panelHeading   = $title;
         self::$toolbarContent = Html::a(
             'Создать продукт',
-            ['create', 'catalogId' => $catalogId],
+            ['create'/*, 'catalogId' => $catalogId*/],
             ['class' => 'btn btn-outline-success']
         );
         
         return self::widget([
             'dataProvider' => $dataProvider,
             'filterModel'  => $searchModel,
-            'columns'      => self::columns($catalogId),
+            'columns'      => self::columns(/*$catalogId*/),
         ]);
     }
     
@@ -49,7 +49,7 @@ class EntityGrid extends BaseGrid
      *
      * @return array
      */
-    private static function columns(int $catalogId): array
+    private static function columns(/*int $catalogId*/): array
     {
         return [
             [
@@ -61,21 +61,48 @@ class EntityGrid extends BaseGrid
                 'attribute' => 'name',
                 'vAlign'    => 'middle',
             ],
-            /*[
-                'attribute' => 'isDelete',
-                'width'     => '80px',
-                'vAlign'    => 'middle',
-            ],*/
+            [
+                'label'  => 'Каталог',
+                'format' => 'raw',
+                'value'  => function ($row) {
+                    if ($row->catalog) {
+                        return sprintf(
+                            '%s (ИД: %s)',
+                            $row->catalog->name,
+                            $row->catalog->id
+                        );
+                    }
+            
+                    return '---';
+                },
+                'vAlign' => 'middle',
+            ],
+            [
+                'label'  => 'Сайт-донор',
+                'format' => 'raw',
+                'value'  => function ($row) {
+                    if ($row->site) {
+                        return sprintf(
+                            '%s (ИД: %s)',
+                            $row->site->name,
+                            $row->site->id
+                        );
+                    }
+            
+                    return '---';
+                },
+                'vAlign' => 'middle',
+            ],
             [
                 'label'  => '',
                 'format' => 'raw',
-                'value'  => function ($row) use ($catalogId) {
+                'value'  => function ($row) {
                     $items = [
                         [
                             'label' => 'Значения',
                             'url'   => Url::to([
                                 '/domains/values/default/index',
-                                'catalogId' => $catalogId,
+                                //'catalogId' => $catalogId,
                                 'entityId'  => $row->id,
                             ]),
                         ],
@@ -83,7 +110,7 @@ class EntityGrid extends BaseGrid
                             'label' => 'Демо',
                             'url'   => Url::to([
                                 'demo',
-                                'catalogId' => $catalogId,
+                                //'catalogId' => $catalogId,
                                 'entityId'  => $row->id,
                             ]),
                         ],
@@ -92,7 +119,7 @@ class EntityGrid extends BaseGrid
                             'label' => 'Редактировать',
                             'url'   => Url::to([
                                 'update',
-                                'catalogId' => $catalogId,
+                                //'catalogId' => $catalogId,
                                 'entityId'  => $row->id,
                             ]),
                         ],
