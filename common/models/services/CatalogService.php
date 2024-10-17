@@ -1,7 +1,11 @@
 <?php declare(strict_types = 1);
 
-namespace modules\domains\modules\catalog\models;
+namespace common\models\services;
 
+use common\models\forms\CatalogForm;
+use common\models\grids\CatalogGrid;
+use common\models\searches\CatalogSearch;
+use common\models\tables\CatalogTable;
 use Exception;
 use Throwable;
 use yii\helpers\ArrayHelper;
@@ -13,50 +17,45 @@ class CatalogService
     
     /**
      * Заголовок
-     *
      * @return string
      */
-    public function getTitle(): string
+    public function title(): string
     {
         return self::TITLE;
     }
     
     /**
      * Грид
-     *
      * @param CatalogSearch $searchModel
      * @param array         $queryParams
      * @param bool          $isEdit
-     *
      * @return string
      * @throws Throwable
      */
-    public function getGrid(
-        CatalogSearch $searchModel,
+    public function grid(
         array $queryParams,
         bool $isEdit
     ): string
     {
+        $searchModel = new CatalogSearch();
+        
         return CatalogGrid::get(
             $searchModel,
             $searchModel->search($queryParams),
-            self::getTitle(),
+            self::title(),
             $isEdit
         );
     }
     
     /**
      * Форма
-     *
-     * @param CatalogForm $form
-     * @param int         $catalogId
-     *
+     * @param int $catalogId
      * @return CatalogForm
      * @throws Exception
      */
-    public function getForm(CatalogForm $form, int $catalogId = 0): CatalogForm
+    public function form(int $catalogId = 0): CatalogForm
     {
-        $form = $catalogId ? $form::findOne($catalogId) : $form;
+        $form = $catalogId ? CatalogForm::findOne($catalogId) : new CatalogForm();
         
         if ( ! $form) {
             throw new Exception(sprintf(
@@ -70,14 +69,12 @@ class CatalogService
     
     /**
      * данные для select2
-     *
      * @return array
      */
-    public function dataForSelect2(): array
+    public function mapIdName(): array
     {
         $rows = CatalogTable::find()
                             ->select('id, name')
-                            //->where('(isEndItem<>1 and isDelete=0) or id=1')
                             ->where('(containsProducts<>1) or id=1')
                             ->all();
         
@@ -96,12 +93,10 @@ class CatalogService
     
     /**
      * Наименование
-     *
      * @param int $catalogId
-     *
      * @return string
      */
-    public function getName(int $catalogId): string
+    public function name(int $catalogId): string
     {
         return CatalogTable::findOne($catalogId)->name;
     }

@@ -1,7 +1,8 @@
 <?php declare(strict_types = 1);
 
-namespace modules\domains\modules\catalog\models;
+namespace common\models\searches;
 
+use common\models\tables\CatalogTable;
 use yii\data\ActiveDataProvider;
 
 class CatalogSearch extends CatalogTable
@@ -13,7 +14,7 @@ class CatalogSearch extends CatalogTable
     public function rules(): array
     {
         return [
-            [['id', 'parentId', 'containsProducts'/*, 'isDelete'*/], 'integer'],
+            [['id', 'parentId', 'containsProducts'], 'integer'],
             [['name'], 'string'],
         ];
     }
@@ -28,7 +29,7 @@ class CatalogSearch extends CatalogTable
     public function search(array $params): ActiveDataProvider
     {
         $query = self::find();
-
+        
         $dataProvider = new ActiveDataProvider(['query' => $query]);
         
         $this->load($params);
@@ -39,13 +40,11 @@ class CatalogSearch extends CatalogTable
         
         $query
             ->andFilterWhere([
-                'id'        => $this->id,
-                'parentId'  => $this->parentId,
+                'id'               => $this->id,
+                'parentId'         => $this->parentId,
                 'containsProducts' => $this->containsProducts,
-                //'isDelete'  => $this->isDelete,
             ])
-            ->andFilterWhere(['like', 'name', $this->name])
-        ;
+            ->andFilterWhere(['like', 'name', $this->name]);
         
         return $dataProvider;
     }

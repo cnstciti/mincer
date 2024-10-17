@@ -1,8 +1,7 @@
 <?php declare(strict_types = 1);
 
-namespace modules\domains\modules\catalog\models;
+namespace common\models\tables;
 
-use modules\domains\BaseTable;
 use yii\db\ActiveQueryInterface;
 
 /**
@@ -36,7 +35,6 @@ class CatalogTable extends BaseTable
             'parentId'         => 'Родительский каталог',
             'name'             => 'Наименование',
             'containsProducts' => 'Содержит товары',
-            //'isDelete'     => 'Признак удаления',
         ];
     }
     

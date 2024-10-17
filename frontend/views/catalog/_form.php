@@ -1,7 +1,7 @@
 <?php declare(strict_types = 1);
 
+use common\models\forms\CatalogForm;
 use kartik\select2\Select2;
-use modules\domains\modules\catalog\models\CatalogForm;
 use yii\helpers\Html;
 use yii\bootstrap5\ActiveForm;
 use yii\web\View;
@@ -27,12 +27,10 @@ try {
         ],
     ]);
 } catch (Exception $e) {
-    echo "Ошика в виджете Select2. " . $e->getMessage();
+    echo "Ошибка в виджете Select2. " . $e->getMessage();
 }
 
 echo $form->field($model, 'containsProducts')->checkbox();
-
-//echo $form->field($model, 'isDelete')->checkbox();
 
 echo Html::tag(
     'div',

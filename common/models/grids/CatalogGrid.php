@@ -1,9 +1,9 @@
 <?php declare(strict_types = 1);
 
-namespace modules\domains\modules\catalog\models;
+namespace common\models\grids;
 
+use common\models\searches\CatalogSearch;
 use kartik\bs5dropdown\ButtonDropdown;
-use modules\domains\BaseGrid;
 use Throwable;
 use yii\data\ActiveDataProvider;
 use yii\helpers\Html;
@@ -85,10 +85,6 @@ class CatalogGrid extends BaseGrid
                 'attribute' => 'containsProducts',
                 'vAlign'    => 'middle',
             ],
-            /*[
-                'attribute' => 'isDelete',
-                'vAlign'    => 'middle',
-            ],*/
             [
                 'format' => 'raw',
                 'value'  => function ($row) use ($isEdit) {
@@ -112,14 +108,14 @@ class CatalogGrid extends BaseGrid
                             [
                                 'label' => 'Атрибуты',
                                 'url'   => Url::to([
-                                    '/domains/attribute/default/index',
+                                    '/attribute/index',
                                     'catalogId' => $row->id,
                                 ]),
                             ],
                             [
                                 'label' => 'Продукты',
                                 'url'   => Url::to([
-                                    '/domains/entity/default/index',
+                                    '/entity/index',
                                     'catalogId' => $row->id,
                                 ]),
                             ],

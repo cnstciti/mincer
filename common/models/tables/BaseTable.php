@@ -1,22 +1,12 @@
 <?php declare(strict_types = 1);
 
-namespace modules\domains;
+namespace common\models\tables;
 
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
-use yii\db\Connection;
 
 class BaseTable extends ActiveRecord
 {
-    
-    /**
-     * @return Connection
-     * @throws \Exception
-     */
-    public static function getDb(): Connection
-    {
-        return Module::getInstance()->getDb();
-    }
     
     /**
      * {@inheritdoc}
@@ -39,7 +29,7 @@ class BaseTable extends ActiveRecord
      * Последний (максимальный) ИД
      * @return int
      */
-    public static function lastId(): int
+    public static function maxId(): int
     {
         return static::find()->max('id');
     }
