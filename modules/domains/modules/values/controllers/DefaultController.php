@@ -5,7 +5,7 @@ namespace modules\domains\modules\values\controllers;
 use Exception;
 use modules\domains\modules\catalog\models\CatalogService;
 use modules\domains\modules\dictionary_content\models\DictionaryContentService;
-use modules\domains\modules\entity\models\ParserEntityService;
+use modules\domains\modules\entity\models\EntityService;
 use modules\domains\modules\image_type\models\ImageTypeSearch;
 use modules\domains\modules\image_type\models\ImageTypeService;
 use modules\domains\modules\set_type\models\SetTypeSearch;
@@ -232,7 +232,7 @@ class DefaultController extends Controller
     {
         return sprintf(
             "Продукт '%s'",
-            (new ParserEntityService())->getName($entityId)
+            (new EntityService())->getName($entityId)
         );
     }
 
@@ -247,7 +247,7 @@ class DefaultController extends Controller
         return sprintf(
             "%s. %s",
             (new CatalogService())->getName($catalogId),
-            (new ParserEntityService())->getTitle()
+            (new EntityService())->getTitle()
         );
     }
     
@@ -289,7 +289,7 @@ class DefaultController extends Controller
             'entityId'      => $entityId,
             'attributeName' => $attributeName,
             'entities' =>  ArrayHelper::map(
-                (new ParserEntityService())->listByCatalog($catalogId, $entityId),
+                (new EntityService())->listByCatalog($catalogId, $entityId),
                 'id',
                 'name'
             ),
@@ -328,7 +328,7 @@ class DefaultController extends Controller
             'catalogId'     => $catalogId,
             'entityId'      => $entityId,
             'entities' =>  ArrayHelper::map(
-                (new ParserEntityService())->listByCatalog($catalogId, $entityId),
+                (new EntityService())->listByCatalog($catalogId, $entityId),
                 'id',
                 'name'
             ),

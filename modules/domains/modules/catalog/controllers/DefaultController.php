@@ -1,49 +1,49 @@
 <?php declare(strict_types = 1);
 
-namespace frontend\controllers;
+namespace modules\domains\modules\catalog\controllers;
 
-use common\models\services\CatalogService;
 use Exception;
-use Throwable;
-use Yii;
+use modules\domains\Module as DomainsModule;
+use modules\domains\modules\catalog\models\CatalogForm;
+use modules\domains\modules\catalog\models\CatalogSearch;
+use modules\domains\modules\catalog\models\CatalogService;
 use yii\web\Controller;
 use yii\web\Response;
 
-class CatalogController extends Controller
+class DefaultController extends Controller
 {
     
     /**
      * Список каталогов
-     * @throws Throwable
+     *
+     * @return string
+     * @throws Exception
+     * @throws \Throwable
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $service = new CatalogService();
         
-        $title = $service->title();
-        $grid  = $service->grid(
-            $this->request->queryParams,
-            Yii::$app->params['domain.edit.catalog']
-        );
-        
         return $this->render('index', [
-            'title' => $title,
-            'grid'  => $grid,
+            'title' => $service->getTitle(),
+            'grid'  => $service->getGrid(
+                new CatalogSearch(),
+                $this->request->queryParams,
+                DomainsModule::getInstance()->editCatalog(),
+            ),
         ]);
     }
-    
+
     /**
      * Создание каталога
+     *
      * @throws Exception
      */
     public function actionCreate()
     {
         $service = new CatalogService();
-        
-        $model      = $service->form();
-        $indexTitle = $service->title();
-        $parents    = $service->mapIdName();
-        
+        $model = $service->getForm(new CatalogForm());
+
         if ($this->request->isPost
             && $model->load($this->request->post())
             && $model->save()
@@ -53,23 +53,22 @@ class CatalogController extends Controller
         
         return $this->render('create', [
             'model'      => $model,
-            'indexTitle' => $indexTitle,
-            'parents'    => $parents,
+            'indexTitle' => $service->getTitle(),
+            'parents'    => $service->dataForSelect2(),
         ]);
     }
     
     /**
      * Редактирование каталога
+     *
      * @param int $catalogId
+     *
      * @throws Exception
      */
     public function actionUpdate(int $catalogId)
     {
         $service = new CatalogService();
-        
-        $model      = $service->form($catalogId);
-        $indexTitle = $service->title();
-        $parents    = $service->mapIdName();
+        $model = $service->getForm(new CatalogForm(), $catalogId);
         
         if ($this->request->isPost
             && $model->load($this->request->post())
@@ -80,13 +79,14 @@ class CatalogController extends Controller
         
         return $this->render('update', [
             'model'      => $model,
-            'indexTitle' => $indexTitle,
-            'parents'    => $parents,
+            'indexTitle' => $service->getTitle(),
+            'parents'    => $service->dataForSelect2(),
         ]);
     }
     
     /**
      * Редирект на список
+     *
      * @return Response
      */
     private function redirectIndex(): Response

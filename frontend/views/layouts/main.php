@@ -35,7 +35,7 @@ AppAsset::register($this);
         ],
     ]);
     $menuItems = [
-        ['label' => 'Каталоги', 'url' => ['/catalog/index']],
+        ['label' => 'Каталоги', 'url' => ['/domains/catalog/default/index']],
         [
             'label' => 'Справочники',
             'items' => [
