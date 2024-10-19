@@ -35,8 +35,9 @@ class ParserEntityTable extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id'   => 'ИД',
-            'name' => 'Наименование',
+            'id'        => 'ИД',
+            'name'      => 'Наименование',
+            'catalogId' => 'Каталог',
         ];
     }
     

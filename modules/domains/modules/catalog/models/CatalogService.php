@@ -95,6 +95,37 @@ class CatalogService
     }
     
     /**
+     * данные для select2 - только каталоги с продуктами
+     * @return array
+     */
+    public function mapContainsProductsOnly(): array
+    {
+        /*
+$items = Category::find()
+    ->select(['name', 'id'])
+    ->where(['is_active' => 1])
+    ->indexBy('id')
+    ->column();
+         */
+        $rows = CatalogTable::find()
+                            ->select('id, name')
+                            ->where(['containsProducts' => 1])
+                            ->all();
+        
+        return ArrayHelper::map(
+            $rows,
+            'id',
+            function ($row) {
+                return sprintf(
+                    '%s (ИД: %s)',
+                    $row->name,
+                    $row->id
+                );
+            }
+        );
+    }
+    
+    /**
      * Наименование
      *
      * @param int $catalogId

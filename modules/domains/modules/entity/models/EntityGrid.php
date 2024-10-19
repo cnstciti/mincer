@@ -15,7 +15,7 @@ class EntityGrid extends BaseGrid
     /**
      * Возвращает грид
      *
-     * @param EntitySearch       $searchModel
+     * @param EntitySearch $searchModel
      * @param ActiveDataProvider $dataProvider
      * @param string             $title
      * @param int                $catalogId

@@ -12,3 +12,5 @@ Yii::setAlias('@storageFolderMincerImg', dirname(dirname(__DIR__)) . '/frontend/
 Yii::setAlias('@storageWebMincerImg', 'http://mincer.local/data');
 Yii::setAlias('@wmData', dirname(dirname(__DIR__)) . '\modules\domains\modules\image_type\models\image');
 
+Yii::setAlias('@parserMegamarket', dirname(dirname(__DIR__)) . '/parser_data/megamarket.ru');
+

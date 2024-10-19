@@ -22,11 +22,9 @@ class EntityService
     
     /**
      * Грид
-     *
      * @param array        $queryParams
      * @param EntitySearch $searchModel
      * @param string       $title
-     *
      * @return string
      * @throws Throwable
      */
@@ -46,10 +44,8 @@ class EntityService
     
     /**
      * Форма для редактирования
-     *
      * @param EntityForm $form
      * @param int        $entityId
-     *
      * @return EntityForm
      * @throws Exception
      */
@@ -69,9 +65,7 @@ class EntityService
     
     /**
      * Наименование
-     *
      * @param int $entityId
-     *
      * @return string
      */
     public function getName(int $entityId): string
@@ -80,18 +74,15 @@ class EntityService
     }
     
     /**
-     * сохранение
-     *
-     * @param int    $catalogId
-     * @param string $entityName
+     * создание продукта
+     * @param string $name
      * @throws Exception
      */
-    public function insert(string $entityName, int $isDelete = 0): void
+    public function create(string $name): void
     {
         try {
-            $t            = new EntityTable();
-            $t->name      = $entityName;
-            $t->isDelete  = $isDelete;
+            $t       = new EntityTable();
+            $t->name = $name;
             $t->save();
         } catch (Throwable $e) {
             throw new Exception('Ошибка при создании Entity. ' . $e->getMessage());
@@ -111,12 +102,12 @@ class EntityService
     public function listByCatalog(int $catalogId, int $entityId): array
     {
         return EntityTable::find()
-            ->select('e.*')
-            ->from(['e' => EntityTable::tableName()])
-            ->leftJoin(['ca' => CatalogEntityTable::tableName()], 'e.id=ca.entityId')
-            ->where(['ca.catalogId' => $catalogId])
-            ->andWhere('ca.entityId <> ' . $entityId)
-            ->all();
+                          ->select('e.*')
+                          ->from(['e' => EntityTable::tableName()])
+                          ->leftJoin(['ca' => CatalogEntityTable::tableName()], 'e.id=ca.entityId')
+                          ->where(['ca.catalogId' => $catalogId])
+                          ->andWhere('ca.entityId <> ' . $entityId)
+                          ->all();
     }
     
 }
