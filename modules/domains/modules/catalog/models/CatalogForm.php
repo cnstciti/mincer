@@ -1,8 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace common\models\forms;
-
-use common\models\tables\CatalogTable;
+namespace modules\domains\modules\catalog\models;
 
 class CatalogForm extends CatalogTable
 {
@@ -15,7 +13,7 @@ class CatalogForm extends CatalogTable
         return [
             [['name'], 'required'],
             [['name'], 'string', 'max' => 255],
-            [['parentId', 'containsProducts'], 'integer'],
+            [['parentId', 'containsProducts'/*, 'isDelete'*/], 'integer'],
         ];
     }
     

@@ -15,7 +15,7 @@ class EntityGrid extends BaseGrid
     /**
      * Возвращает грид
      *
-     * @param ParserEntitySearch $searchModel
+     * @param EntitySearch $searchModel
      * @param ActiveDataProvider $dataProvider
      * @param string             $title
      * @param int                $catalogId
@@ -24,7 +24,7 @@ class EntityGrid extends BaseGrid
      * @throws Throwable
      */
     public static function get(
-        ParserEntitySearch $searchModel,
+        EntitySearch $searchModel,
         ActiveDataProvider $dataProvider,
         string $title,
         int $catalogId

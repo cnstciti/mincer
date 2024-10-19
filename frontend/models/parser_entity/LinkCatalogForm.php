@@ -2,7 +2,9 @@
 
 namespace frontend\models\parser_entity;
 
-class EntityForm extends EntityTable
+use frontend\models\tables\ParserEntityTable;
+
+class LinkCatalogForm extends ParserEntityTable
 {
     
     /**
@@ -11,9 +13,7 @@ class EntityForm extends EntityTable
     public function rules()
     {
         return [
-            [['name'], 'required'],
-            [['name'], 'string', 'max' => 255],
-            //[['isDelete'], 'integer'],
+            [['catalogId'], 'required'],
         ];
     }
 

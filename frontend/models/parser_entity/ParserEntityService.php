@@ -3,19 +3,22 @@
 namespace frontend\models\parser_entity;
 
 use Exception;
+use frontend\models\tables\ParserEntityTable;
 use modules\domains\modules\catalog_entity\models\CatalogEntityTable;
+use modules\domains\modules\entity\models\EntityTable;
 use Throwable;
+use yii\helpers\ArrayHelper;
 
 class ParserEntityService
 {
-    private const TITLE = 'Продукты';
+    private const TITLE = 'Парсер. Продукты';
     
     
     /**
      * Заголовок
      * @return string
      */
-    public function getTitle(): string
+    public function title(): string
     {
         return self::TITLE;
     }
@@ -24,59 +27,102 @@ class ParserEntityService
      * Грид
      *
      * @param array        $queryParams
-     * @param ParserEntitySearch $searchModel
      * @param string       $title
      *
      * @return string
      * @throws Throwable
      */
     public function getGrid(
-        ParserEntitySearch $searchModel,
         array $queryParams,
         string $title
     ): string
     {
+        $searchModel = new ParserEntitySearch();
+        
         return ParserEntityGrid::get(
             $searchModel,
             $searchModel->search($queryParams),
-            $title//,
-            //(int)$queryParams['catalogId']
+            $title
         );
     }
     
     /**
-     * Форма для редактирования
-     *
-     * @param EntityForm $form
-     * @param int        $entityId
-     *
-     * @return EntityForm
+     * Модель LinkCatalogForm
+     * @param int $entityId
+     * @return LinkCatalogForm
      * @throws Exception
      */
-    public function getForm(EntityForm $form, int $entityId = 0): EntityForm
+    public function getLinkCatalogForm(int $entityId = 0): LinkCatalogForm
     {
-        $form = $entityId ? $form::findOne($entityId) : $form;
+        $model = $entityId
+            ? LinkCatalogForm::findOne($entityId)
+            : new LinkCatalogForm;
         
-        if ( ! $form) {
+        if ( ! $model) {
             throw new Exception(sprintf(
-                "Не найдена модель EntityForm с ИД: %d",
+                "Не найдена модель LinkCatalogForm с ИД: %d",
                 $entityId
             ));
         }
         
-        return $form;
+        return $model;
+    }
+    
+    /**
+     * Модель LinkEntityForm
+     * @param int $entityId
+     * @return LinkEntityForm
+     * @throws Exception
+     */
+    public function getLinkEntityForm(int $entityId = 0): LinkEntityForm
+    {
+        $model = $entityId
+            ? LinkEntityForm::findOne($entityId)
+            : new LinkEntityForm;
+        
+        if ( ! $model) {
+            throw new Exception(sprintf(
+                "Не найдена модель LinkEntityForm с ИД: %d",
+                $entityId
+            ));
+        }
+        
+        return $model;
     }
     
     /**
      * Наименование
-     *
-     * @param int $entityId
-     *
+     * @param int $id
      * @return string
      */
-    public function getName(int $entityId): string
+    public function name(int $entityId): string
     {
-        return EntityTable::findOne($entityId)->name;
+        return ParserEntityTable::findOne($entityId)->name;
+    }
+    
+    /**
+     * данные для select2 - продукты каталога, без базового продукта
+     * @return array
+     */
+    public function products(int $catalogId, int $entityId): array
+    {
+        $rows = EntityTable::find()
+            ->select('e.id, e.name')
+            ->from(['e' => EntityTable::tableName()])
+            ->leftJoin(['ca' => CatalogEntityTable::tableName()], 'e.id=ca.entityId')
+            ->where(['ca.catalogId' => $catalogId])
+            ->andWhere('ca.entityId <> ' . $entityId)
+            ->all();
+    
+        $format = function ($row) {
+            return sprintf(
+                '%s (ИД: %s)',
+                $row->name,
+                $row->id
+            );
+        };
+        
+        return ArrayHelper::map($rows, 'id', $format);
     }
     
     /**
@@ -85,7 +131,7 @@ class ParserEntityService
      * @param int    $catalogId
      * @param string $entityName
      * @throws Exception
-     */
+     * /
     public function insert(string $entityName, int $isDelete = 0): void
     {
         try {
@@ -102,7 +148,7 @@ class ParserEntityService
      * Последний (максимальный) ИД
      *
      * @return int
-     */
+     * /
     public function lastId(): int
     {
         return EntityTable::lastId();
@@ -118,5 +164,5 @@ class ParserEntityService
             ->andWhere('ca.entityId <> ' . $entityId)
             ->all();
     }
-    
+    */
 }
