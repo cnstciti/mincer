@@ -1,15 +1,15 @@
 <?php declare(strict_types = 1);
 
-namespace frontend\models\parser_entity;
+namespace frontend\models\parser_attribute;
 
-use frontend\models\tables\ParserEntityTable;
+use frontend\models\tables\ParserAttributeTable;
 
-class LinkEntityForm extends ParserEntityTable
+class LinkAttributeForm extends ParserAttributeTable
 {
     
     /**
      * {@inheritdoc}
-     */
+     * /
     public function init()
     {
         parent::init();
@@ -31,12 +31,11 @@ class LinkEntityForm extends ParserEntityTable
     public function rules()
     {
         return [
-            [['entityId', 'isBaseEntity'], 'integer'],
-            ['entityId', 'validateOne'],
-            ['isBaseEntity', 'validateOne'],
+            [['attributeId'], 'integer'],
+            ['status', 'string'],
         ];
     }
-    
+    /*
     public function validateOne()
     {
         $entityId     = intval($_POST['LinkEntityForm']['entityId']);
@@ -53,5 +52,5 @@ class LinkEntityForm extends ParserEntityTable
             $this->addError('isBaseEntity', $msg);
         }
     }
-
+*/
 }

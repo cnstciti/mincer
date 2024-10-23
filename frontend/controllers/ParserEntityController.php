@@ -5,10 +5,7 @@ namespace frontend\controllers;
 use Exception;
 use frontend\models\parser_entity\ParserEntityService;
 use modules\domains\modules\catalog\models\CatalogService;
-use modules\domains\modules\catalog_entity\models\CatalogEntityService;
-use modules\domains\modules\entity\models\EntityService;
 use Throwable;
-use Yii;
 use yii\web\Controller;
 
 class ParserEntityController extends Controller
@@ -81,7 +78,9 @@ class ParserEntityController extends Controller
         if ($this->request->isPost
             && $model->validate()
             && $model->load($this->request->post())
+            && $model->save()
         ) {
+            /*
             $transaction = Yii::$app->db->beginTransaction();
             try {
                 if (intval($model->isBaseEntity)) {
@@ -98,7 +97,7 @@ class ParserEntityController extends Controller
                 $transaction->rollBack();
                 throw $e;
             }
-            
+            */
             return $this->redirect(['index']);
         }
         

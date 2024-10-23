@@ -1,11 +1,11 @@
 <?php declare(strict_types = 1);
 
-namespace frontend\models\parser_entity;
+namespace frontend\models\parser_attribute;
 
-use frontend\models\tables\ParserEntityTable;
+use frontend\models\tables\ParserAttributeTable;
 use yii\data\ActiveDataProvider;
 
-class ParserEntitySearch extends ParserEntityTable
+class ParserAttributeSearch extends ParserAttributeTable
 {
     
     /**
@@ -14,8 +14,8 @@ class ParserEntitySearch extends ParserEntityTable
     public function rules(): array
     {
         return [
-            [['id', 'isBaseEntity'], 'integer'],
-            [['name'], 'string'],
+            [['id'], 'integer'],
+            [['name', 'status'], 'string'],
         ];
     }
     
@@ -28,8 +28,9 @@ class ParserEntitySearch extends ParserEntityTable
      */
     public function search(array $params): ActiveDataProvider
     {
-        $query = self::find();
-            //->leftJoin(['ps' => 'parser_site'], 'parser_entity.parserSiteId=ps.id');
+        $query = self::find()
+            ->leftJoin(['pea' => 'parser_entity_attribute'], 'pea.parserAttributeId=parser_attribute.id')
+            ->leftJoin(['pe' => 'parser_entity'], 'pea.parserEntityId=pe.id');
 
         $dataProvider = new ActiveDataProvider(['query' => $query]);
         
@@ -42,10 +43,11 @@ class ParserEntitySearch extends ParserEntityTable
         $query
             ->andFilterWhere([
                 'id'        => $this->id,
-                'isBaseEntity'  => $this->isBaseEntity,
-                //'ce.catalogId' => $params['catalogId'],
+                //'isBaseEntity'  => $this->isBaseEntity,
+                'pe.catalogId' => $params['catalogId'],
             ])
             ->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['like', 'status', $this->status])
             //->orderBy('id desc')
         ;
         

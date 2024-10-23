@@ -2,24 +2,18 @@
 
 namespace frontend\models\tables;
 
-use modules\domains\modules\catalog\models\CatalogTable;
-use modules\domains\modules\entity\models\EntityTable;
 use yii\db\ActiveQueryInterface;
 use yii\db\ActiveRecord;
 
 /**
- * This is the model class for table "parser_site".
+ * This is the model class for table "parser_entity_attribute".
  *
- * @property int    $id           ИД
- * @property string $name         Наименование
- * @property int    $catalogId    ИД каталога
- * @property int    $entityId     ИД продукта
- * @property int    $parserSiteId ИД сайта-донора
- * @property int    $isBaseEntity Флаг - базовый продукт или нет
- * @property string $status       Статус
- * @property string $createdAt    Дата создания
+ * @property int    $id                   ИД
+ * @property int    $parserEntityId       ИД продукта
+ * @property int    $parserAttributeId    ИД атрибута
+ * @property string $createdAt            Дата создания
  */
-class ParserEntityTable extends ActiveRecord
+class ParserEntityAttributeTable extends ActiveRecord
 {
     
     /**
@@ -27,12 +21,12 @@ class ParserEntityTable extends ActiveRecord
      */
     public static function tableName(): string
     {
-        return '{{%parser_entity}}';
+        return '{{%parser_entity_attribute}}';
     }
     
     /**
      * {@inheritdoc}
-     */
+     * /
     public function attributeLabels()
     {
         return [
@@ -46,7 +40,7 @@ class ParserEntityTable extends ActiveRecord
     
     /**
      * @return ActiveQueryInterface
-     */
+     * /
     public function getCatalog(): ActiveQueryInterface
     {
         return $this->hasOne(CatalogTable::class, ['id' => 'catalogId']);
@@ -54,7 +48,7 @@ class ParserEntityTable extends ActiveRecord
     
     /**
      * @return ActiveQueryInterface
-     */
+     * /
     public function getEntity(): ActiveQueryInterface
     {
         return $this->hasOne(EntityTable::class, ['id' => 'entityId']);
@@ -62,10 +56,10 @@ class ParserEntityTable extends ActiveRecord
     
     /**
      * @return ActiveQueryInterface
-     */
+     * /
     public function getSite(): ActiveQueryInterface
     {
         return $this->hasOne(ParserSiteTable::class, ['id' => 'parserSiteId']);
     }
-    
+    */
 }

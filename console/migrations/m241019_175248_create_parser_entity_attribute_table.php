@@ -3,12 +3,12 @@
 use yii\db\Migration;
 
 /**
- * Handles the creation of table `{{%parser_entity}}`.
+ * Handles the creation of table `{{%parser_entity_attribute}}`.
  */
-class m241016_151152_create_parser_entity_table extends Migration
+class m241019_175248_create_parser_entity_attribute_table extends Migration
 {
-    private const TABLE_NAME = '{{%parser_entity}}';
-    private const TABLE_COMMENT = 'Парсер - сущности';
+    private const TABLE_NAME = '{{%parser_entity_attribute}}';
+    private const TABLE_COMMENT = 'Парсер - связь продуктов и атрибутов';
     
     /**
      * {@inheritdoc}
@@ -23,12 +23,8 @@ class m241016_151152_create_parser_entity_table extends Migration
         
         $this->createTable(self::TABLE_NAME, [
             'id' => $this->primaryKey()->unsigned()->comment('ИД'),
-            'name' => $this->string(255)->notNull()->comment('Наименование'),
-            'catalogId' => $this->integer(10)->unsigned()->comment('ИД каталога'),
-            'entityId' => $this->integer(10)->unsigned()->comment('ИД продукта'),
-            'parserSiteId' => $this->integer(10)->unsigned()->comment('ИД сайта-донора'),
-            'isBaseEntity' => $this->integer(1)->unsigned()->defaultValue(0)->comment('Флаг - базовый продукт или нет'),
-            'status' => $this->string(128)->comment('Статус'),
+            'parserEntityId' => $this->integer(10)->unsigned()->notNull()->comment('ИД продукта'),
+            'parserAttributeId' => $this->integer(10)->unsigned()->notNull()->comment('ИД атрибута'),
             'createdAt' => $this->timestamp()->defaultExpression('NOW()')->comment('Дата создания'),
         ], $tableOptions);
     }

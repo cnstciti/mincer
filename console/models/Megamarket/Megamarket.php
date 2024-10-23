@@ -1,73 +1,96 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace console\models\Megamarket;
 
+use console\models\BaseParser;
 use DiDom\Document;
-use frontend\models\tables\ParserEntityTable;
-use Throwable;
 use Yii;
 use yii\helpers\FileHelper;
 
-class Megamarket
+class Megamarket extends BaseParser
 {
     private const PARSER_SITE_ID = 1;
-
     
-    public function run()
+    protected function parserSiteId(): int
     {
-        $transaction = Yii::$app->db->beginTransaction();
-        try {
-            $path = Yii::getAlias('@parserMegamarket') . '/akkumulyatory-dlya-motociklov';
-            echo 'path: ' . $path . PHP_EOL;
+        return self::PARSER_SITE_ID;
+    }
+    
+    /**
+     * @throws \DiDom\Exceptions\InvalidSelectorException
+     * @throws \yii\db\Exception
+     */
+    protected function runParser(): void
+    {
+        // Это для теста! Потом убрать
+        $this->truncateTables();
+        
+        
+        // Путь к файлам для парсера
+        $path = Yii::getAlias('@parserMegamarket') . '/akkumulyatory-dlya-motociklov';
+        echo 'Путь к файлам для парсера: ' . $path . PHP_EOL;
+        
+        // получаем все файлы в корне "пути"
+        $allFiles = FileHelper::findFiles($path, ['only'=>['*.html'], 'recursive' => false]);
+        
+        //print_r($allFiles);
+        foreach ($allFiles as $file) {
+            $document = new Document($file, true);
+    
+            // берем Имя продукта
+            $name = trim($document->first('.pdp-header__title_only-title')->text());
             
-            $allFiles = FileHelper::findFiles($path,['only'=>['*.html'], 'recursive' => false]);
+            // создаем Продукт
+            $entityId = $this->createEntity($name);
+            echo 'Продукт: ' . $name . PHP_EOL;
+            echo 'Продукт ИД: ' . $entityId . PHP_EOL;
+
+            // берем Описание продукта
+            $desc = trim($document->first('.cut-block__text-inner .text-block')->text());
+            //echo 'Описание продукта: ' . $desc . PHP_EOL;
+
+            // создаем атрибут "Описание"
+            $attributeId = $this->createAttribute('Описание');
+            echo 'Атрибут: Описание' . PHP_EOL;
+            echo 'Атрибут ИД: ' . $attributeId . PHP_EOL;
             
-            //print_r($allFiles);
-            foreach ($allFiles as $file) {
-                $document = new Document($file, true);
-        
-                $name = trim($document->first('.pdp-header__title_only-title')->text());
-                echo 'name: ' . $name . PHP_EOL;
-                $t = new ParserEntityTable;
-                $t->name = $name;
-                $t->parserSiteId = self::PARSER_SITE_ID;
-                $t->save();
-        
-                $desc = trim($document->first('.cut-block__text-inner .text-block')->text());
-                //echo 'desc: ' . $desc . PHP_EOL;
-        
-                $av = [];
-                $groups = $document->find('.pdp-specs__group-info');
-                foreach ($groups as $group) {
-                    $items = $group->find('.pdp-specs__item');
-                    foreach ($items as $item) {
-                        if ($itemName = $item->first('.pdp-specs__item-name')) {
-                            $itemName = trim($itemName->text());
-                        }
-                        if ($itemValue = $item->first('.pdp-specs__item-value')) {
-                            $itemValue = trim($itemValue->text());
-                        }
-                        
-                        if ($itemName && $itemValue) {
-                            $av[] = [
-                                'attr' => $itemName,
-                                'value' => $itemValue,
-                            ];
-                        }
+            // создаем связь Продукт - Атрибут
+            $entityAttributeId = $this->createEntityAttributeLink($entityId, $attributeId);
+            echo 'Связь (Продукт - Атрибут) ИД: ' . $entityAttributeId . PHP_EOL;
+            
+            
+            $av = [];
+            $groups = $document->find('.pdp-specs__group-info');
+            foreach ($groups as $group) {
+                $items = $group->find('.pdp-specs__item');
+                foreach ($items as $item) {
+                    if ($itemName = $item->first('.pdp-specs__item-name')) {
+                        $itemName = trim($itemName->text());
+                        $attributeId = $this->createAttribute($itemName);
+                        echo 'Атрибут: ' . $itemName . PHP_EOL;
+                        echo 'Атрибут ИД: ' . $attributeId . PHP_EOL;
+                        $entityAttributeId = $this->createEntityAttributeLink($entityId, $attributeId);
+                        echo 'Связь (Продукт - Атрибут) ИД: ' . $entityAttributeId . PHP_EOL;
+                    }
+                    if ($itemValue = $item->first('.pdp-specs__item-value')) {
+                        $itemValue = trim($itemValue->text());
+                    }
+                    
+                    if ($itemName && $itemValue) {
+                        $av[] = [
+                            'attr' => $itemName,
+                            'value' => $itemValue,
+                        ];
                     }
                 }
-                
-                print_r($av);
-        
-                echo '------------' . PHP_EOL;
-        
             }
+            
+            //print_r($av);
     
-            $transaction->commit();
-        } catch (Throwable $e) {
-            $transaction->rollBack();
-            echo 'Ошибка: ' . $e->getMessage() . PHP_EOL;
+            echo '------------' . PHP_EOL;
+    
         }
+
     }
     
     

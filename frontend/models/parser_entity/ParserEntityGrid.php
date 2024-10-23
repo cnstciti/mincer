@@ -83,6 +83,11 @@ class ParserEntityGrid extends BaseGrid
                 'vAlign' => 'middle',
             ],
             [
+                'label'  => 'Признак базового продукта',
+                'attribute' => 'isBaseEntity',
+                'vAlign'    => 'middle',
+            ],
+            [
                 'label'  => 'Сайт-донор',
                 'format' => 'raw',
                 'value'  => function ($row) {
@@ -122,6 +127,14 @@ class ParserEntityGrid extends BaseGrid
                                     'id'        => $row->id,
                                     'catalogId' => $row->catalogId,
                                     'entityId'  => $row->entityId ?? 0,
+                                ]),
+                            ],
+                            '<div class="dropdown-divider"></div>',
+                            [
+                                'label' => 'Атрибуты',
+                                'url'   => Url::to([
+                                    '/parser-attribute/index',
+                                    'catalogId' => $row->catalogId,
                                 ]),
                             ],
                         ];
