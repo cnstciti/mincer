@@ -119,7 +119,7 @@ class ParserEntityGrid extends BaseGrid
                     
                     if ($row->catalogId) {
                         $entityItem = [
-                            '<div class="dropdown-divider"></div>',
+                            //'<div class="dropdown-divider"></div>',
                             [
                                 'label' => 'Привязать к продукту',
                                 'url'   => Url::to([
@@ -134,6 +134,15 @@ class ParserEntityGrid extends BaseGrid
                                 'label' => 'Атрибуты',
                                 'url'   => Url::to([
                                     '/parser-attribute/index',
+                                    'catalogId' => $row->catalogId,
+                                ]),
+                            ],
+                            [
+                                'label' => 'Значения',
+                                'url'   => Url::to([
+                                    '/parser-value/index',
+                                    'parserEntityId' => $row->id,
+                                    'dictionaryId' => $row->dictionaryId,
                                     'catalogId' => $row->catalogId,
                                 ]),
                             ],

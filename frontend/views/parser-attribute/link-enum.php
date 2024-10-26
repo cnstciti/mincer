@@ -1,6 +1,7 @@
 <?php declare(strict_types = 1);
 
 use frontend\models\parser_entity\LinkCatalogForm;
+use frontend\models\parser_simple_type\LinkEnumForm;
 use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\web\View;
@@ -8,14 +9,13 @@ use yii\bootstrap5\ActiveForm;
 
 /**
  * @var View            $this
- * @var LinkCatalogForm $model
+ * @var LinkEnumForm $model
  * @var string          $indexTitle
- * @var array           $attributes
+ * @var array           $dictionaryContents
  * @var string          $entityTitle
- * @var int             $catalogId
  */
 
-$title       = 'Привязка к атрибуту';
+$title       = 'Привязка значения';
 $this->title = sprintf('%s :: %s', Yii::$app->name, $title);
 
 $this->params['breadcrumbs'][] = [

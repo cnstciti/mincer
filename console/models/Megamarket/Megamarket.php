@@ -38,49 +38,71 @@ class Megamarket extends BaseParser
             $document = new Document($file, true);
     
             // берем Имя продукта
-            $name = trim($document->first('.pdp-header__title_only-title')->text());
+            //$name = trim($document->first('.pdp-header__title_only-title')->text());
+            $name = $this->getDOMElement($document, '.pdp-header__title_only-title');
             
             // создаем Продукт
-            $entityId = $this->createEntity($name);
+            $entityId = $this->createEntity($name, self::PARSER_SITE_ID);
             echo 'Продукт: ' . $name . PHP_EOL;
             echo 'Продукт ИД: ' . $entityId . PHP_EOL;
 
-            // берем Описание продукта
-            $desc = trim($document->first('.cut-block__text-inner .text-block')->text());
-            //echo 'Описание продукта: ' . $desc . PHP_EOL;
-
-            // создаем атрибут "Описание"
-            $attributeId = $this->createAttribute('Описание');
-            echo 'Атрибут: Описание' . PHP_EOL;
-            echo 'Атрибут ИД: ' . $attributeId . PHP_EOL;
             
-            // создаем связь Продукт - Атрибут
-            $entityAttributeId = $this->createEntityAttributeLink($entityId, $attributeId);
-            echo 'Связь (Продукт - Атрибут) ИД: ' . $entityAttributeId . PHP_EOL;
+            $attributeName = 'Описание';
+            //$attributeValue = trim($document->first('.cut-block__text-inner .text-block')->text());
+            $attributeValue = $this->getDOMElement($document, '.cut-block__text-inner .text-block');
+            
+            if ($attributeName && $attributeValue) {
+                // создаем атрибут
+                $attributeId = $this->createAttribute($attributeName);
+                echo 'Атрибут: '  . $attributeName . PHP_EOL;
+                echo 'Атрибут ИД: ' . $attributeId . PHP_EOL;
+    
+                // создаем связь Продукт - Атрибут
+                $entityAttributeId = $this->createEntityAttributeLink($entityId, $attributeId);
+                echo 'Связь (Продукт - Атрибут) ИД: ' . $entityAttributeId . PHP_EOL;
+    
+                // создаем Значение
+                $valueId = $this->createValue($attributeValue);
+                echo 'Значение: ' . $attributeValue . PHP_EOL;
+                echo 'Значение ИД: ' . $valueId . PHP_EOL;
+    
+                // создаем связь Продукт - Атрибут - Значение
+                $eavId = $this->createEAV($entityAttributeId, $valueId);
+                echo 'Связь (Продукт - Атрибут - Значение) ИД: ' . $eavId . PHP_EOL;
+            }
             
             
-            $av = [];
             $groups = $document->find('.pdp-specs__group-info');
             foreach ($groups as $group) {
                 $items = $group->find('.pdp-specs__item');
                 foreach ($items as $item) {
-                    if ($itemName = $item->first('.pdp-specs__item-name')) {
-                        $itemName = trim($itemName->text());
-                        $attributeId = $this->createAttribute($itemName);
-                        echo 'Атрибут: ' . $itemName . PHP_EOL;
+                    /*
+                    $attributeName = $item->first('.pdp-specs__item-name');
+                    $attributeName = trim($attributeName->text());
+                    $attributeValue = $item->first('.pdp-specs__item-value');
+                    $attributeValue = trim($attributeValue->text());
+                    */
+                    $attributeName = $this->getDOMElement($item, '.pdp-specs__item-name');
+                    $attributeValue = $this->getDOMElement($item, '.pdp-specs__item-value');
+                    
+                    if ($attributeName && $attributeValue) {
+                        // создаем атрибут
+                        $attributeId = $this->createAttribute($attributeName);
+                        echo 'Атрибут: '  . $attributeName . PHP_EOL;
                         echo 'Атрибут ИД: ' . $attributeId . PHP_EOL;
+    
+                        // создаем связь Продукт - Атрибут
                         $entityAttributeId = $this->createEntityAttributeLink($entityId, $attributeId);
                         echo 'Связь (Продукт - Атрибут) ИД: ' . $entityAttributeId . PHP_EOL;
-                    }
-                    if ($itemValue = $item->first('.pdp-specs__item-value')) {
-                        $itemValue = trim($itemValue->text());
-                    }
-                    
-                    if ($itemName && $itemValue) {
-                        $av[] = [
-                            'attr' => $itemName,
-                            'value' => $itemValue,
-                        ];
+    
+                        // создаем Значение
+                        $valueId = $this->createValue($attributeValue);
+                        echo 'Значение: ' . $attributeValue . PHP_EOL;
+                        echo 'Значение ИД: ' . $valueId . PHP_EOL;
+    
+                        // создаем связь Продукт - Атрибут - Значение
+                        $eavId = $this->createEAV($entityAttributeId, $valueId);
+                        echo 'Связь (Продукт - Атрибут - Значение) ИД: ' . $eavId . PHP_EOL;
                     }
                 }
             }

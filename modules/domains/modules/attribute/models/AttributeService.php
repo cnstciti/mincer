@@ -92,8 +92,9 @@ class AttributeService
             ->leftJoin(['u' => 'unit'], 'a.unitId=u.id')
             ->leftJoin(['d' => 'dictionary'], 'a.dictionaryId=d.id')
             ->leftJoin(['t' => 'type_value'], 'a.typeValueId=t.id')
-            //->where(['a.isDelete' => 0])
+            ->leftJoin(['ca' => 'catalog_attribute'], 'a.id=ca.catalogId')
             ->andWhere(['not in', 'a.id', $caIds])
+            //->andWhere(['ca.catalogId' => $catalogId])
             ->asArray()
             ->all();
         
