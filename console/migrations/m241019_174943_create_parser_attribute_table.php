@@ -24,7 +24,7 @@ class m241019_174943_create_parser_attribute_table extends Migration
         $this->createTable(self::TABLE_NAME, [
             'id' => $this->primaryKey()->unsigned()->comment('ИД'),
             'name' => $this->string(255)->notNull()->comment('Наименование'),
-            'attributeId' => $this->integer(10)->unsigned()->comment('ИД атрибута'),
+            'attributeId' => $this->integer(10)->unsigned()->notNull()->defaultValue(0)->comment('ИД атрибута'),
             'status' => $this->string(128)->comment('Статус'),
             'createdAt' => $this->timestamp()->defaultExpression('NOW()')->comment('Дата создания'),
         ], $tableOptions);

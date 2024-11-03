@@ -7,15 +7,19 @@ use yii\db\ActiveQueryInterface;
 use yii\db\ActiveRecord;
 
 /**
- * This is the model class for table "parser_value".
+ * This is the model class for table "parser_value_image".
  *
- * @property int    $id                     ИД
- * @property string $meaning                Суть значения
- * @property int    $dictionaryContentId    ИД содержания словаря
- * @property string $status                 Статус
- * @property string $createdAt              Дата создания
+ * @property int    $id        ИД
+ * @property string $dir       Путь файла
+ * @property string $fileName  Наименование файла
+ * @property string $extension Расширение файла
+ * @property int    $height    Высота изображения
+ * @property int    $width     Ширина изображения
+ * @property int    $size      Размер файла, КБ
+ * @property int    $status    Статус
+ * @property string $createdAt Дата создания
  */
-class ParserValueTable extends ActiveRecord
+class ParserValueImageTable extends ActiveRecord
 {
     
     /**
@@ -23,12 +27,12 @@ class ParserValueTable extends ActiveRecord
      */
     public static function tableName(): string
     {
-        return '{{%parser_value}}';
+        return '{{%parser_value_image}}';
     }
     
     /**
      * {@inheritdoc}
-     */
+     * /
     public function attributeLabels()
     {
         return [

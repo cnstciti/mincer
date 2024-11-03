@@ -26,5 +26,20 @@ class CatalogEntityService
             throw new Exception('Ошибка при создании CatalogEntity. ' . $e->getMessage());
         }
     }
+    
+    /**
+     * Последний (максимальный) ИД
+     *
+     * @return int
+     */
+    public function lastId(): int
+    {
+        return CatalogEntityTable::lastId();
+    }
 
+    public function getId(int $catalogId, int $entityId): int
+    {
+        return CatalogEntityTable::findOne(['catalogId' => $catalogId, 'entityId' => $entityId])->id;
+    }
+    
 }

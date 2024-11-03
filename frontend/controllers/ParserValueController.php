@@ -57,18 +57,18 @@ class ParserValueController extends Controller
         ]);
     }
     
-    public function actionLinkEnum(int $parserEntityId, int $dictionaryId, int $catalogId)
+    public function actionLinkEnum(int $valueId, int $parserEntityId, int $dictionaryId/*, int $catalogId*/)
     {
         $entityService = new ParserEntityService();
     
         $entityTitle = $entityService->title();
 
-        $service = new ParserSimpleTypeService();
+        //$service = new ParserSimpleTypeService();
         
         //$model      = $service->getLinkAttributeForm($id);
-        $model      = new LinkEnumForm();
+        $model      = LinkEnumForm::findOne($valueId);
         //$indexTitle = $service->title();
-        $indexTitle = 'ddddd';
+        $indexTitle = 'Парсер. Значения';
         $dictionaryContents = (new DictionaryContentService)->dataForSelect2($dictionaryId);
         
         if ($this->request->isPost
@@ -78,13 +78,13 @@ class ParserValueController extends Controller
         ) {
             return $this->redirect(['index', 'parserEntityId' => $parserEntityId]);
         }
-        
+    
         return $this->render('link-enum', [
-            'model'       => $model,
-            'indexTitle'  => $indexTitle,
-            'dictionaryContents'  => $dictionaryContents,
-            'entityTitle' => $entityTitle,
-            'catalogId'   => $catalogId,
+            'model'              => $model,
+            'indexTitle'         => $indexTitle,
+            'dictionaryContents' => $dictionaryContents,
+            'entityTitle'        => $entityTitle,
+            'parserEntityId'     => $parserEntityId,
         ]);
     }
     

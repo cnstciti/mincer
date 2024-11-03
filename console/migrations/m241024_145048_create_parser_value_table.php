@@ -24,7 +24,7 @@ class m241024_145048_create_parser_value_table extends Migration
         $this->createTable(self::TABLE_NAME, [
             'id' => $this->primaryKey()->unsigned()->comment('ИД'),
             'meaning' => $this->text()->notNull()->comment('Суть значения'),
-            'dictionaryContentId' => $this->integer(10)->unsigned()->comment('ИД содержания словаря'),
+            'dictionaryContentId' => $this->integer(10)->unsigned()->notNull()->defaultValue(0)->comment('ИД содержания словаря'),
             'status' => $this->string(128)->comment('Статус'),
             'createdAt' => $this->timestamp()->defaultExpression('NOW()')->comment('Дата создания'),
         ], $tableOptions);

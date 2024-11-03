@@ -2,18 +2,26 @@
 
 namespace console\models;
 
-use DiDom\Document;
-use Exception;
 use frontend\models\tables\ParserAttributeTable;
 use frontend\models\tables\ParserEAVTable;
 use frontend\models\tables\ParserEntityAttributeTable;
 use frontend\models\tables\ParserEntityTable;
+use frontend\models\tables\ParserValueImageTable;
 use frontend\models\tables\ParserValueTable;
+use modules\domains\modules\image_type\models\image\FileDto;
+use modules\domains\modules\image_type\models\image\ImgDto;
+use modules\domains\modules\image_type\models\image\ImgFileDto;
+use modules\domains\modules\image_type\models\image\ImgHelper;
 use Throwable;
 use Yii;
+use yii\imagine\Image;
 
 abstract class BaseParser
 {
+    public const STATUS_FROM_PARSER = 'from_parser';
+    public const STATUS_LOAD = 'load';
+    
+    
     abstract protected function runParser(): void;
     
     abstract protected function parserSiteId(): int;
@@ -82,9 +90,10 @@ abstract class BaseParser
                 $t               = new ParserEntityTable;
                 $t->name         = $name;
                 $t->parserSiteId = $this->parserSiteId();
+                $t->status       = self::STATUS_FROM_PARSER;
                 $t->save();
                 // берем ИД продукта
-                $attributeId = Yii::$app->db->getLastInsertID();
+                $entityId = Yii::$app->db->getLastInsertID();
             }
         } catch (Throwable $e) {
             echo sprintf('Ошибка создания продукта: %s. Продукт: %s.%s',
@@ -94,7 +103,7 @@ abstract class BaseParser
             );
         }
     
-        return intval($attributeId);
+        return intval($entityId);
     }
     
     protected function createAttribute(string $name): int
@@ -108,8 +117,9 @@ abstract class BaseParser
             
             if ( ! $attributeId) {
                 // если НЕ нашли атрибут в таблице, то создаем его
-                $t       = new ParserAttributeTable;
-                $t->name = $name;
+                $t         = new ParserAttributeTable;
+                $t->name   = $name;
+                $t->status = self::STATUS_FROM_PARSER;
                 $t->save();
                 // берем ИД атрибута
                 $attributeId = Yii::$app->db->getLastInsertID();
@@ -172,6 +182,7 @@ abstract class BaseParser
                 // если НЕ нашли значение в таблице, то создаем его
                 $t          = new ParserValueTable;
                 $t->meaning = $meaning;
+                $t->status  = self::STATUS_FROM_PARSER;
                 $t->save();
                 // берем ИД атрибута
                 $valueId = Yii::$app->db->getLastInsertID();
@@ -206,7 +217,7 @@ abstract class BaseParser
                 $t->valueId           = $valueId;
                 $t->save();
                 // берем ИД связи
-                $entityAttributeId = Yii::$app->db->getLastInsertID();
+                $eavId = Yii::$app->db->getLastInsertID();
             }
         } catch (Throwable $e) {
             echo sprintf(
@@ -218,7 +229,65 @@ abstract class BaseParser
             );
         }
         
-        return intval($entityAttributeId);
+        return intval($eavId);
+    }
+    
+    protected function createImage(array $pathInfo, string $pathFile): int
+    {
+        try {
+            $imgHelper = new ImgHelper();
+            $storageParserMincerImg = Yii::getAlias('@storageParserFolderMincerImg');
+    
+            $fileDto = new FileDto(
+                '',
+                $pathInfo['filename'],
+                $pathInfo['extension'],
+                0
+            );
+    
+            [$width, $height] = getimagesize($pathFile);
+    
+            $pictureDto = new ImgDto(
+                Image::getImagine()->open($pathFile),
+                $width,
+                $height
+            );
+    
+            $imgFileDto =  new ImgFileDto(
+                $pictureDto,
+                $fileDto,
+                ''
+            );
+    
+            // проверяем, есть ли связь
+            $parserValueImageId = ParserValueImageTable::find()
+                ->select('id')
+                ->where(['fileName' => $pathInfo['filename'],])
+                ->scalar();
+            
+            if (!$parserValueImageId) {
+                $dto = $imgHelper->save($storageParserMincerImg, $imgFileDto);
+    
+                $t            = new ParserValueImageTable();
+                $t->dir       = $dto->file()->dir();
+                $t->fileName  = $dto->file()->fileName();
+                $t->extension = $dto->file()->extension();
+                $t->height    = $dto->img()->height();
+                $t->width     = $dto->img()->width();
+                $t->size      = $dto->file()->size();
+                $t->status    = self::STATUS_FROM_PARSER;
+                $t->save();
+                $parserValueImageId = Yii::$app->db->getLastInsertID();
+            }
+        } catch (Throwable $e) {
+            echo sprintf(
+                'Ошибка создания изображения: %s.%s',
+                $e->getMessage(),
+                PHP_EOL
+            );
+        }
+    
+        return intval($parserValueImageId);
     }
     
 }

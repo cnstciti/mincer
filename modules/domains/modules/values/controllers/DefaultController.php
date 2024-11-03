@@ -190,8 +190,10 @@ class DefaultController extends Controller
             && $model->load($this->request->post())
             && !empty($file = UploadedFile::getInstance($model, 'file'))
         ) {
-            (new ImageTypeService)->load(
-                $file,
+            $imageTypeService = new ImageTypeService;
+            $dto = $imageTypeService->getUploadedFileData($file);
+            $imageTypeService->load(
+                $dto,
                 $catalogAttributeId,
                 $catalogEntityId,
                 $typeId

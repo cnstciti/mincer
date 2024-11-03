@@ -110,9 +110,9 @@ class ParserSimpleTypeGrid extends BaseGrid
                                      /*'typeName'           => $row['typeName'],
                                      'attributeName'      => $row['attributeName'],
                                      'catalogId'          => $row['catalogId'] ?? 0,
-                                     'entityId'           => $row['entityId'] ?? 0,
-                                     'valueId'            => $row['valueId'] ?? 0,*/
-                                     'parserEntityId' => $row['parserEntityId'] ?? 0,
+                                     'entityId'           => $row['entityId'] ?? 0,*/
+                                     'valueId'            => $row['valueId'],
+                                     'parserEntityId' => $row['parserEntityId'],
                                      'dictionaryId' => $row['dictionaryId'] ?? 0,
                                      /*'catalogAttributeId' => $row['catalogAttributeId'],
                                      'catalogEntityId'    => $row['catalogEntityId'],

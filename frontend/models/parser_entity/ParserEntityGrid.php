@@ -142,7 +142,7 @@ class ParserEntityGrid extends BaseGrid
                                 'url'   => Url::to([
                                     '/parser-value/index',
                                     'parserEntityId' => $row->id,
-                                    'dictionaryId' => $row->dictionaryId,
+                                    //'dictionaryId' => $row->dictionaryId,
                                     'catalogId' => $row->catalogId,
                                 ]),
                             ],

@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-use frontend\models\parser_entity\LinkCatalogForm;
+use frontend\models\parser_entity\LinkEntityForm;
 use frontend\models\parser_simple_type\LinkEnumForm;
 use kartik\select2\Select2;
 use yii\helpers\Html;
@@ -8,46 +8,42 @@ use yii\web\View;
 use yii\bootstrap5\ActiveForm;
 
 /**
- * @var View            $this
+ * @var View         $this
  * @var LinkEnumForm $model
- * @var string          $indexTitle
- * @var array           $dictionaryContents
- * @var string          $entityTitle
+ * @var string       $indexTitle
+ * @var array        $dictionaryContents
+ * @var string       $entityTitle
+ * @var int          $parserEntityId
  */
 
-$title       = 'Привязка значения';
+$title       = 'Привязка к содержимому словаря';
 $this->title = sprintf('%s :: %s', Yii::$app->name, $title);
 
 $this->params['breadcrumbs'][] = [
     'label' => $entityTitle,
-    'url' => ['/parser-entity/index']
+    'url'   => ['/parser-entity/index'],
 ];
 $this->params['breadcrumbs'][] = [
     'label' => $indexTitle,
-    'url'   => ['index', 'catalogId' => $catalogId],
+    'url'   => ['/parser-value/index', 'parserEntityId' => $parserEntityId],
 ];
 $this->params['breadcrumbs'][] = $title;
 
 echo Html::tag('h1', $title);
-
-echo Html::tag(
-        'div',
-        "Атрибут парсера: <b>$model->name</b>",
-        ['class' => 'mb-2 mt-2']
-);
+//echo Html::tag('p', "Продукт: <b>{$name}</b>", ['class' => 'pt-3 pb-2']);
 
 $form = ActiveForm::begin();
 
 ?>
     <div class="row">
-        <div class="col-5">
+        <div class="col">
             <?php
             
             try {
-                echo $form->field($model, 'attributeId')
+                echo $form->field($model, 'dictionaryContentId')
                           ->widget(Select2::class, [
-                              'data'          => $attributes,
-                              'options'       => ['placeholder' => 'Выберите атрибут...'],
+                              'data'          => $dictionaryContents,
+                              'options'       => ['placeholder' => 'Выберите содержимое словаря ...'],
                               'pluginOptions' => [
                                   'allowClear' => true,
                               ],
@@ -59,16 +55,12 @@ $form = ActiveForm::begin();
                     ['class' => 'text-bg-danger p-3 mb-3']
                 );
             }
-
-            echo $form->field($model, 'status')
-                 ->textInput([
-                     'maxlength' => true,
-                     'id'        => 'name',
-                 ])
-            //     ->label(false)
-            ;
-            
-            
+            /*
+                        echo $form->field($model, 'isBaseEntity')->checkbox([
+                            'template' => '<div class="col">{input} {label}</div><div class="col-md-6">{error}</div>',
+                            'checked' => $model->isBaseEntity ? true : false,
+                        ]);
+            */
             echo Html::tag(
                 'div',
                 Html::submitButton('Сохранить', ['class' => 'btn btn-success'])

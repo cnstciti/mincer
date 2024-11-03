@@ -33,6 +33,8 @@ class ParserAttributeSearch extends ParserAttributeTable
             ->leftJoin(['pe' => 'parser_entity'], 'pea.parserEntityId=pe.id');
 
         $dataProvider = new ActiveDataProvider(['query' => $query]);
+    
+        $dataProvider->pagination->pageSize = 60;
         
         $this->load($params);
         
@@ -48,7 +50,7 @@ class ParserAttributeSearch extends ParserAttributeTable
             ])
             ->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'status', $this->status])
-            //->orderBy('id desc')
+            ->orderBy('name')
         ;
         
         return $dataProvider;

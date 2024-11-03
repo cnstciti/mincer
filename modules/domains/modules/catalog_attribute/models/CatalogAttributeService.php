@@ -26,5 +26,10 @@ class CatalogAttributeService
             throw new Exception('Ошибка при создании CatalogAttribute. ' . $e->getMessage());
         }
     }
-
+    
+    public function getId(int $catalogId, int $attributeId): int
+    {
+        return CatalogAttributeTable::findOne(['catalogId' => $catalogId, 'attributeId' => $attributeId])->id;
+    }
+    
 }

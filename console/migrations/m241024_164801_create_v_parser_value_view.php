@@ -36,7 +36,8 @@ AS select
     `pv`.`id` as `valueId`,
     `pv`.`meaning` as `meaning`,
     `dc`.`id` as `dictionaryContentId`,
-    `dc`.`value` as `dictionaryContentValue`
+    `dc`.`value` as `dictionaryContentValue`,
+    `pv`.`dictionaryContentId` as `parserDictionaryContentId`
 from parser_entity pe
 left join catalog c on c.id = pe.catalogId
 left join entity e on e.id = pe.entityId
@@ -48,7 +49,13 @@ left join unit u on u.id = a.unitId
 left join dictionary d on d.id = a.dictionaryId
 left join parser_eav eav on pea.id = eav.entityAttributeId
 left join parser_value pv on pv.id = eav.valueId
-left join dictionary_content dc on dc.id = pv.dictionaryContentId;
+left join dictionary_content dc on dc.id = pv.dictionaryContentId
+where
+    (`tv`.`name` in ('int',
+    'float',
+    'string',
+    'text',
+    'enum'))
 QUERY;
         $this->execute($query);
     }

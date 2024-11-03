@@ -2,11 +2,10 @@
 
 namespace frontend\models\parser_simple_type;
 
-use yii\base\Model;
+use frontend\models\tables\ParserValueTable;
 
-class LinkEnumForm extends Model
+class LinkEnumForm extends ParserValueTable
 {
-    public $selectDictionaryContentId;
     
     /**
      * {@inheritdoc}
@@ -14,7 +13,7 @@ class LinkEnumForm extends Model
     public function rules(): array
     {
         return [
-            [['selectEntity'], 'required'],
+            [['dictionaryContentId'], 'required'],
         ];
     }
 

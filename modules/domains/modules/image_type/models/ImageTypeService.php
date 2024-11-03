@@ -67,14 +67,14 @@ class ImageTypeService
     
     /**
      * загрузка
-     * @param UploadedFile $file
+     * @param ImgFileDto $dto
      * @param int          $catalogAttributeId
      * @param int          $catalogEntityId
      * @param int          $typeId
      * @throws Exception
      */
     public function load(
-        UploadedFile $file,
+        ImgFileDto $dto,
         int $catalogAttributeId,
         int $catalogEntityId,
         int $typeId
@@ -86,22 +86,27 @@ class ImageTypeService
             try {
             */
         $numGroup = ImageTypeDataView::find()
-                                   ->select('numGroup')
-                                   ->where([
-                                       'catalogAttributeId' => $catalogAttributeId,
-                                       'catalogEntityId' => $catalogEntityId,
-                                   ])
-                                   ->groupBy(['numGroup'])
-                                   ->scalar();
-        ++$numGroup;
+            ->select('numGroup')
+            ->where([
+                'catalogAttributeId' => $catalogAttributeId,
+                'catalogEntityId' => $catalogEntityId,
+            ])
+            ->groupBy(['numGroup'])
+            ->scalar();
+        
+        if ($numGroup) {
+            ++$numGroup;
+        } else {
+            $numGroup = 1;
+        }
         
         $valueService = new ValueService;
         $eavService = new EavService;
         
-        $uploadDto = $this->getUploadedFileData($file);
+        //$uploadDto = $this->getUploadedFileData($file);
         
         // изображение для каталога
-        $catalogImg = $this->createCatalogImg($uploadDto);
+        $catalogImg = $this->createCatalogImg($dto);
         $valueId = $valueService->insert($typeId);
         $this->insert($catalogImg, $valueId, $numGroup);
         $eavService->insert(
@@ -111,7 +116,7 @@ class ImageTypeService
         );
         
         // изображение для карточки
-        $cardImg = $this->createCardImg($uploadDto);
+        $cardImg = $this->createCardImg($dto);
         $valueId = $valueService->insert($typeId);
         $this->insert($cardImg, $valueId, $numGroup);
         $eavService->insert(
@@ -121,7 +126,7 @@ class ImageTypeService
         );
         
         // изображение для каталога (с водяным знаком)
-        $catalogWmImg = $this->createCatalogWmImg($uploadDto);
+        $catalogWmImg = $this->createCatalogWmImg($dto);
         $valueId = $valueService->insert($typeId);
         $this->insert($catalogWmImg, $valueId, $numGroup);
         $eavService->insert(
@@ -155,7 +160,7 @@ class ImageTypeService
         }
     }
     
-    private function getUploadedFileData(UploadedFile $file): ImgFileDto
+    public function getUploadedFileData(UploadedFile $file): ImgFileDto
     {
         $fileInfo = pathinfo($file->tempName);
         

@@ -15,7 +15,8 @@ class ImgHelper
         if ($dto->img()->width() > $maxSize
             || $dto->img()->height() > $maxSize
         ) {
-            $file = $dto->file()->dir() . '/' . $dto->file()->fileName() . '.tmp';
+            $ext = $dto->file()->extension() ? '.' . $dto->file()->extension() : '.tmp';
+            $file = $dto->file()->dir() . '/' . $dto->file()->fileName() . $ext;
             if ($dto->img()->width() < $dto->img()->height()) {
                 $resizeFileObject = Image::resize($file, null, $maxSize);
             } else {

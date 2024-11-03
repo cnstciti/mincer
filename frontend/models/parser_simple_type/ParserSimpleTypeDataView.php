@@ -5,12 +5,17 @@ namespace frontend\models\parser_simple_type;
 use modules\domains\BaseTable;
 
 /**
- * This is the model class for table "v_simple_type_data".
+ * This is the model class for table "v_parser_value_view".
  *
  * @property int    $catalogId
  * @property string $catalogName
+ * @property int    $parserEntityId
+ * @property string $parserEntityName
+ * @property int    $isBaseEntity
  * @property int    $entityId
  * @property string $entityName
+ * @property int    $parserAttributeId
+ * @property string $parserAttributeName
  * @property int    $attributeId
  * @property string $attributeName
  * @property int    $typeId
@@ -19,11 +24,12 @@ use modules\domains\BaseTable;
  * @property string $unitName
  * @property int    $dictionaryId
  * @property string $dictionaryName
- * @property int    $eavId
  * @property int    $valueId
- * @property string $value
+ * @property string $meaning
+ * @property int    $dictionaryContentId
+ * @property string $dictionaryContentValue
  * @property int    $catalogAttributeId
- * @property int    $catalogEntityId
+ * @property int    $parserDictionaryContentId
  */
 class ParserSimpleTypeDataView extends BaseTable
 {

@@ -33,6 +33,7 @@ class LinkAttributeForm extends ParserAttributeTable
         return [
             [['attributeId'], 'integer'],
             ['status', 'string'],
+            ['attributeId', 'default', 'value' => 0],
         ];
     }
     /*

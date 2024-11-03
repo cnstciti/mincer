@@ -34,6 +34,8 @@ class LinkEntityForm extends ParserEntityTable
             [['entityId', 'isBaseEntity'], 'integer'],
             ['entityId', 'validateOne'],
             ['isBaseEntity', 'validateOne'],
+            ['entityId', 'default', 'value' => 0],
+            ['isBaseEntity', 'default', 'value' => 0],
         ];
     }
     

@@ -137,27 +137,27 @@ class DefaultController extends Controller
             return $this->redirectIndex($catalogId);
         }
         
-            return $this->render('select', [
-                'model'      => $model,
-                'title'      => $this->getCatalogAttributeTitle($catalogId),
-                'catalogId'  => $catalogId,
-                'attributes' => $service->dataForSelect2($catalogId),
-            ]);
-        }
-        
-        /**
-         * Заголовок 'Каталог. Атрибут'
-         *
-         * @par                                                                                                                                                                                                                                                                                                                                       am int $catalogId
-         * @return string
-         */
-        private function getCatalogAttributeTitle(int $catalogId): string
-        {
-            return sprintf(
-                '%s. %s',
-                (new CatalogService())->getName($catalogId),
-                (new AttributeService())->getTitle()
-            );
+        return $this->render('select', [
+            'model'      => $model,
+            'title'      => $this->getCatalogAttributeTitle($catalogId),
+            'catalogId'  => $catalogId,
+            'attributes' => $service->dataForSelect2All(),
+        ]);
+    }
+    
+    /**
+     * Заголовок 'Каталог. Атрибут'
+     *
+     * @par                                                                                                                                                                                                                                                                                                                                       am int $catalogId
+     * @return string
+     */
+    private function getCatalogAttributeTitle(int $catalogId): string
+    {
+        return sprintf(
+            '%s. %s',
+            (new CatalogService())->getName($catalogId),
+            (new AttributeService())->getTitle()
+        );
     }
     
     /**
